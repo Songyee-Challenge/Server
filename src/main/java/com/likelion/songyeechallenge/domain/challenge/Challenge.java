@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -23,7 +25,7 @@ public class Challenge {
     @Column(nullable = false, length = 30)
     private String title;
 
-    private String  writer;
+    private String writer;
 
     @Column(nullable = false)
     private String startDate;
@@ -46,7 +48,7 @@ public class Challenge {
     @ManyToMany
     private Set<User> participants;
 
-    private double progress;
+    private double progressPercent;
 
     @Builder
     public Challenge(String title, String writer, String startDate, String endDate, String category, String explain, Picture picture) {

@@ -2,6 +2,7 @@ package com.likelion.songyeechallenge.controller;
 
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.service.ChallengeService;
+import com.likelion.songyeechallenge.web.dto.ChallengeDetailResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeSaveRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +37,10 @@ public class ChallengeController {
     @GetMapping("/finish")
     public List<ChallengeListResponseDto> getFinishChallenge() {
         return challengeService.findFinishedPost();
+    }
+
+    @GetMapping("/{id}")
+    public ChallengeDetailResponseDto getChallengeDetail(@PathVariable Long id) {
+        return challengeService.findById(id);
     }
 }
