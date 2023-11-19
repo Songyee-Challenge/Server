@@ -1,7 +1,6 @@
 package com.likelion.songyeechallenge.web.dto;
 
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
-import com.likelion.songyeechallenge.domain.picture.Picture;
 import com.likelion.songyeechallenge.service.PictureService;
 import lombok.Getter;
 
@@ -30,7 +29,7 @@ public class ChallengeListResponseDto {
         this.filePath = pictureService.getPictureUrl(entity);
     }
 
-    public double calculateProgress() {
+    private double calculateProgress() {
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
