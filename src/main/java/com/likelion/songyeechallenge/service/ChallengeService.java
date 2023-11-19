@@ -4,6 +4,8 @@ import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
 import com.likelion.songyeechallenge.domain.mission.Mission;
 import com.likelion.songyeechallenge.domain.picture.Picture;
+import com.likelion.songyeechallenge.domain.user.User;
+import com.likelion.songyeechallenge.web.dto.ChallengeDetailResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeSaveRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -60,5 +62,11 @@ public class ChallengeService {
         return challengeRepository.findAfterEndDateDesc(formatedToday).stream()
                 .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
                 .collect(Collectors.toList());
+    }
+
+    public ChallengeDetailResponseDto findById(Long challenge_id) {
+        Challenge challenge = challengeRepository.findById(challenge_id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + challenge_id));
+        return new ChallengeDetailResponseDto(challenge, pictureService);
     }
 }

@@ -1,36 +1,50 @@
 package com.likelion.songyeechallenge.web.dto;
 
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
-import com.likelion.songyeechallenge.domain.picture.Picture;
+import com.likelion.songyeechallenge.domain.mission.Mission;
+import com.likelion.songyeechallenge.domain.user.User;
 import com.likelion.songyeechallenge.service.PictureService;
 import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
-public class ChallengeListResponseDto {
+public class ChallengeDetailResponseDto {
     private Long challenge_id;
     private String title;
-    private String category;
+    private String writer;
     private String startDate;
     private String endDate;
+    private String category;
     private String explain;
-    private double progressPercent;
+    private List<MissionResponseDto> missions;
     private String filePath;
+    private int participantsNumber;
+    private double progressPercent;
 
-    public ChallengeListResponseDto(Challenge entity, PictureService pictureService) {
+    public ChallengeDetailResponseDto(Challenge entity, PictureService pictureService) {
         this.challenge_id = entity.getChallenge_id();
         this.title = entity.getTitle();
-        this.category = entity.getCategory();
+        this.writer = entity.getWriter();
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
+        this.category = entity.getCategory();
         this.explain = entity.getExplain();
-        this.progressPercent = calculateProgress();
+        this.missions = convertMissionDto(entity.getMissions());
         this.filePath = pictureService.getPictureUrl(entity);
+        this.participantsNumber = entity.getParticipants().size();
+        this.progressPercent = calculateProgress();
     }
 
-    public double calculateProgress() {
+    private List<MissionResponseDto> convertMissionDto(List<Mission> missions) {
+        return missions.stream().map(mission -> new MissionResponseDto(mission.getMissionDate(), mission.getMission()))
+                .collect(Collectors.toList());
+    }
+
+    private double calculateProgress() {
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 

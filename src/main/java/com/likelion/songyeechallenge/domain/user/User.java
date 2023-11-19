@@ -1,5 +1,6 @@
 package com.likelion.songyeechallenge.domain.user;
 
+import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

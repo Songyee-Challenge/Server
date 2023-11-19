@@ -1,5 +1,6 @@
 package com.likelion.songyeechallenge.domain.mission;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import lombok.Builder;
 import lombok.Getter;
