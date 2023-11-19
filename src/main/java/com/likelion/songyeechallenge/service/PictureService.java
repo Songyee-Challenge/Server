@@ -1,5 +1,6 @@
 package com.likelion.songyeechallenge.service;
 
+import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.picture.Picture;
 import com.likelion.songyeechallenge.domain.picture.PictureRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @Service
 public class PictureService {
 
+    private String uploadDir = "./src/main/resources/static/images";
     private final PictureRepository pictureRepository;
 
     @Transactional
@@ -29,7 +31,6 @@ public class PictureService {
         try {
             String originalName = file.getOriginalFilename();
             String newName = createFileUrl(originalName);
-            String uploadDir = "./src/main/resources/static/images";
 
             Path uploadPath = Paths.get(uploadDir);
             Path filePath = uploadPath.resolve(newName);
@@ -60,5 +61,10 @@ public class PictureService {
         String ext = filename.substring(idx);
 
         return ext;
+    }
+
+    public String getPictureUrl(Challenge challenge) {
+        Picture picture = challenge.getPicture();
+        return uploadDir + "/" + picture.getNewName();
     }
 }
