@@ -19,4 +19,7 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
     List<Challenge> findBetweenStartDateAndEndDateHot(String today);
 
     List<Challenge> findByCategory(String category);
+
+    @Query("SELECT c FROM Challenge c WHERE c.title LIKE %:searchWord% OR c.category LIKE %:searchWord% ORDER BY c.challenge_id DESC")
+    List<Challenge> findByTitleOrCategory(String searchWord);
 }

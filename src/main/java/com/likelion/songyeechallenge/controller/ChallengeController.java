@@ -43,4 +43,9 @@ public class ChallengeController {
     public ChallengeDetailResponseDto getChallengeDetail(@PathVariable Long id) {
         return challengeService.findById(id);
     }
+
+    @GetMapping("/search")
+    public List<ChallengeListResponseDto> searchChallenge(@RequestParam("searchWord") String searchWord) {
+        return challengeService.search(searchWord);
+    }
 }
