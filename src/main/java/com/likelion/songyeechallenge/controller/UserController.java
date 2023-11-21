@@ -24,6 +24,7 @@ public class UserController {
         return "signup";
     }
 
+
     @PostMapping("/signup")
     public String signup(UserFormDto userFormDto) {
         Long userId = userService.join(userFormDto);
