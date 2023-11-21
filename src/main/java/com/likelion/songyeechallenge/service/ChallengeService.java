@@ -68,4 +68,11 @@ public class ChallengeService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + challenge_id));
         return new ChallengeDetailResponseDto(challenge, pictureService);
     }
+
+    @Transactional(readOnly = true)
+    public List<ChallengeListResponseDto> search(String searchWord) {
+        return challengeRepository.findByTitleOrCategory(searchWord).stream()
+                .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
+                .collect(Collectors.toList());
+    }
 }
