@@ -2,10 +2,10 @@ package com.likelion.songyeechallenge.web.dto;
 
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.picture.Picture;
+import com.likelion.songyeechallenge.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Getter
@@ -32,6 +32,17 @@ public class ChallengeSaveRequestDto {
         this.picture = picture;
     }
 
+//    public Challenge toEntity(User user) {
+//        return Challenge.builder()
+//                .title(title)
+//                .writer(user.getMajor() + " " + user.getName())
+//                .startDate(startDate)
+//                .endDate(endDate)
+//                .category(category)
+//                .explain(explain)
+//                .picture(picture)
+//                .build();
+//    }
     public Challenge toEntity() {
         return Challenge.builder()
                 .title(title)
