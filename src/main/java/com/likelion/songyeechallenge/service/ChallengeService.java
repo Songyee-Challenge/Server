@@ -1,6 +1,6 @@
 package com.likelion.songyeechallenge.service;
 
-// import com.likelion.songyeechallenge.config.dto.SecurityUtil;
+import com.likelion.songyeechallenge.config.dto.SecurityUtil;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
 import com.likelion.songyeechallenge.domain.mission.Mission;
@@ -33,9 +33,8 @@ public class ChallengeService {
 
     @Transactional
     public Challenge postChallenge(ChallengeSaveRequestDto requestDto, MultipartFile file) {
-//        User user = SecurityUtil.getCurrentUser();
-//        Challenge challenge = challengeRepository.save(requestDto.toEntity(user));
-        Challenge challenge = challengeRepository.save(requestDto.toEntity());
+        User user = SecurityUtil.getCurrentUser();
+        Challenge challenge = challengeRepository.save(requestDto.toEntity(user));
         Picture picture = pictureService.uploadPicture(file);
         picture.setChallenge(challenge);
 

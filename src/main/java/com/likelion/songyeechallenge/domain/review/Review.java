@@ -1,16 +1,20 @@
 package com.likelion.songyeechallenge.domain.review;
 
+import com.likelion.songyeechallenge.domain.BaseTimeEntity;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
+import com.likelion.songyeechallenge.domain.likes.Like;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @Entity
-public class Review {
+public class Review extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long review_id;
@@ -24,14 +28,44 @@ public class Review {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private String writer;
+
+    private int likeCount;
+
     @ManyToOne
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
 
+    @OneToMany(mappedBy = "review")
+    private List<Like> likes = new ArrayList<>();
+
     @Builder
-    public Review(String title, String myChallenge, String content) {
+    public Review(String title, String myChallenge, String content, String writer) {
         this.title = title;
         this.myChallenge = myChallenge;
         this.content = content;
+        this.writer = writer;
+        this.likeCount = 0;
+    }
+
+    public void addLike(Like like) {
+        likes.add(like);
+        like.setReview(this);
+        increasedLikeCount();;
+    }
+
+    public void removeLike(Like like) {
+        likes.remove(like);
+        like.setReview(null);
+        decreaseLikeCount();;
+    }
+
+    private void increasedLikeCount() {
+        this.likeCount++;
+    }
+
+    private void decreaseLikeCount() {
+        this.likeCount = Math.max(0, this.likeCount - 1);
     }
 }
