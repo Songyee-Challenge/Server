@@ -1,6 +1,6 @@
 package com.likelion.songyeechallenge.service;
 
-import com.likelion.songyeechallenge.config.dto.SecurityUtil;
+// import com.likelion.songyeechallenge.config.dto.SecurityUtil;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
 import com.likelion.songyeechallenge.domain.mission.Mission;
