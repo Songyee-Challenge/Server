@@ -1,10 +1,16 @@
 package com.likelion.songyeechallenge.domain.user;
 
+import com.likelion.songyeechallenge.domain.challenge.Challenge;
+import com.likelion.songyeechallenge.domain.likes.Like;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -30,7 +36,11 @@ public class User {
     @Column(nullable = false)
     private Long student_id;
 
+    @ManyToMany(mappedBy = "participants")
+    private Set<Challenge> challenges = new HashSet<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Like> likes = new ArrayList<>();
 
     @Builder
     public User(Long user_id, String email, String password, String name, String major, Long student_id) {
