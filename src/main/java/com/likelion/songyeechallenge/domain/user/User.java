@@ -51,4 +51,5 @@ public class User {
         this.major = major;
         this.student_id = student_id;
     }
+
 }
