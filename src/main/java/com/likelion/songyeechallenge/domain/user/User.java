@@ -30,6 +30,8 @@ public class User {
     @Column(nullable = false)
     private Long student_id;
 
+
+
     @Builder
     public User(Long user_id, String email, String password, String name, String major, Long student_id) {
         this.user_id = user_id;
@@ -39,4 +41,5 @@ public class User {
         this.major = major;
         this.student_id = student_id;
     }
+
 }
