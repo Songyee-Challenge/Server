@@ -87,4 +87,14 @@ public class ChallengeService {
                 .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public Long joinChallenge(Long challengeId, String jwtToken) {
+        User participant = userRepository.findByUser_id(jwtTokenProvider.getUserIdFromToken(jwtToken));
+        Challenge challenge = challengeRepository.findByChallenge_id(challengeId);
+        challenge.getParticipants().add(participant);
+        challengeRepository.save(challenge);
+
+        return participant.getUser_id();
+    }
 }
