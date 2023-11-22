@@ -28,13 +28,11 @@ public class Review extends BaseTimeEntity {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
     private String writer;
 
     private int likeCount;
 
     @ManyToOne
-    @JoinColumn(name = "challenge_id")
     private Challenge challenge;
 
     @OneToMany(mappedBy = "review")
@@ -47,6 +45,10 @@ public class Review extends BaseTimeEntity {
         this.content = content;
         this.writer = writer;
         this.likeCount = 0;
+    }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
     }
 
     public void addLike(Like like) {

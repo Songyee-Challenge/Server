@@ -32,10 +32,9 @@ public class ChallengeSaveRequestDto {
         this.picture = picture;
     }
 
-    public Challenge toEntity(User user) {
+    public Challenge toEntity() {
         return Challenge.builder()
                 .title(title)
-                .writer(user.getMajor() + " " + user.getName())
                 .startDate(startDate)
                 .endDate(endDate)
                 .category(category)
