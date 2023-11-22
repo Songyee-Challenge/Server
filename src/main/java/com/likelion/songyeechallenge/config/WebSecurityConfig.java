@@ -20,16 +20,18 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
-                        .loginPage("/signup")
-                        .defaultSuccessUrl("/home")
+                        .loginPage("/user/login")
+                        .defaultSuccessUrl("/user/home", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/user/logout")
-                        .logoutSuccessUrl("/home")
+                        .logoutSuccessUrl("/user/home")
                         .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true)
                         .permitAll()
+                ).csrf(csrf -> csrf
+                        .ignoringAntMatchers("/user/signup")  // 회원가입 페이지에서는 CSRF 토큰 비활성화
                 );
         return http.build();
     }

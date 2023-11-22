@@ -67,3 +67,6 @@ Temporary Items
 ### macOS Patch ###
 # iCloud generated files
 *.icloud
+
+#mail 관련 개인정보
+src/main/resources/application.properties
