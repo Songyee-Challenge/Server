@@ -66,4 +66,8 @@ public class Challenge {
     public void setMissions(List<Mission> missionList) {
         this.missions = missionList;
     }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
+    }
 }

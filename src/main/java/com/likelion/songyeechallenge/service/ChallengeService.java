@@ -1,11 +1,10 @@
 package com.likelion.songyeechallenge.service;
 
-import com.likelion.songyeechallenge.config.dto.SecurityUtil;
+import com.likelion.songyeechallenge.config.JwtTokenProvider;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
 import com.likelion.songyeechallenge.domain.mission.Mission;
 import com.likelion.songyeechallenge.domain.picture.Picture;
-import com.likelion.songyeechallenge.domain.user.User;
 import com.likelion.songyeechallenge.web.dto.ChallengeDetailResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeSaveRequestDto;
@@ -30,11 +29,15 @@ public class ChallengeService {
     private final ChallengeRepository challengeRepository;
     private final PictureService pictureService;
     private final MissionService missionService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public Challenge postChallenge(ChallengeSaveRequestDto requestDto, MultipartFile file) {
-        User user = SecurityUtil.getCurrentUser();
-        Challenge challenge = challengeRepository.save(requestDto.toEntity(user));
+    public Challenge postChallenge(ChallengeSaveRequestDto requestDto, MultipartFile file, String jwtToken) {
+        Challenge challenge = challengeRepository.save(requestDto.toEntity());
+
+        String writer = jwtTokenProvider.getUserMajorFromToken(jwtToken) + " " + jwtTokenProvider.getUserNameFromToken(jwtToken);
+        challenge.setWriter(writer);
+
         Picture picture = pictureService.uploadPicture(file);
         picture.setChallenge(challenge);
 

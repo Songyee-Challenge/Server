@@ -22,12 +22,11 @@ public class ReviewSaveRequestDto {
         this.writer = writer;
     }
 
-    public Review toEntity(User user) {
+    public Review toEntity() {
         return Review.builder()
                 .title(title)
                 .myChallenge(myChallenge)
                 .content(content)
-                .writer(user.getName())
                 .build();
     }
 

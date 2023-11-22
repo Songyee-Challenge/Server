@@ -1,5 +1,6 @@
 package com.likelion.songyeechallenge.domain.user;
 
+import com.likelion.songyeechallenge.domain.auth.Auth;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.likes.Like;
 import lombok.Builder;
@@ -36,20 +37,34 @@ public class User {
     @Column(nullable = false)
     private Long student_id;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @ManyToMany(mappedBy = "participants")
     private Set<Challenge> challenges = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     private List<Like> likes = new ArrayList<>();
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private Auth auth;
+
     @Builder
-    public User(Long user_id, String email, String password, String name, String major, Long student_id) {
+    public User(Long user_id, String email, String password, String name, String major, Long student_id, Role role) {
         this.user_id = user_id;
         this.email = email;
         this.password = password;
         this.name = name;
         this.major = major;
         this.student_id = student_id;
+        this.role = role;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 }

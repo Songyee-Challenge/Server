@@ -1,12 +1,14 @@
 package com.likelion.songyeechallenge.service;
 
-import com.likelion.songyeechallenge.config.dto.SecurityUtil;
+import com.likelion.songyeechallenge.config.JwtTokenProvider;
+import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
 import com.likelion.songyeechallenge.domain.likes.Like;
 import com.likelion.songyeechallenge.domain.likes.LikeRepository;
 import com.likelion.songyeechallenge.domain.review.Review;
 import com.likelion.songyeechallenge.domain.review.ReviewRepository;
 import com.likelion.songyeechallenge.domain.user.User;
+import com.likelion.songyeechallenge.domain.user.UserRepository;
 import com.likelion.songyeechallenge.web.dto.ReviewChallengeDto;
 import com.likelion.songyeechallenge.web.dto.ReviewListResponseDto;
 import com.likelion.songyeechallenge.web.dto.ReviewSaveRequestDto;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,19 +29,27 @@ public class ReviewService {
     private final ChallengeRepository challengeRepository;
     private final ReviewRepository reviewRepository;
     private final LikeRepository likeRepository;
+    private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public List<ReviewChallengeDto> findMyChallenge() {
-        User user = SecurityUtil.getCurrentUser();
-        return challengeRepository.findByParticipants(user).stream()
+    public List<ReviewChallengeDto> findMyChallenge(String jwtToken) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        User user = userRepository.findByUser_id(userId);
+        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(user.getUser_id());
+
+        return participatedChallenges.stream()
                 .map(challenge -> new ReviewChallengeDto(challenge.getTitle(), challenge.getCategory()))
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public Review postReview(ReviewSaveRequestDto requestDto) {
-        User user = SecurityUtil.getCurrentUser();
-        return reviewRepository.save(requestDto.toEntity(user));
+    public Review postReview(ReviewSaveRequestDto requestDto, String jwtToken) {
+        Review review = reviewRepository.save(requestDto.toEntity());
+        String writer = jwtTokenProvider.getUserMajorFromToken(jwtToken) + " " + jwtTokenProvider.getUserNameFromToken(jwtToken);
+        review.setWriter(writer);
+
+        return reviewRepository.save(review);
     }
 
     @Transactional(readOnly = true)
@@ -49,12 +60,12 @@ public class ReviewService {
     }
 
     @Transactional
-    public int pressLike(Long id) {
-        User user = SecurityUtil.getCurrentUser();
-        Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다. id=" + id));
+    public int pressLike(Long reviewId, String jwtToken) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다. id=" + reviewId));
 
-        Like like = likeRepository.findByUserAndReview(user, review);
+        Like like = likeRepository.findByUserAndReview(userId, reviewId);
 
         if(like != null) {
             review.removeLike(like);
@@ -62,7 +73,7 @@ public class ReviewService {
             return 0;
         }
         else {
-            like = Like.builder().user(user).review(review).build();
+            like = Like.builder().user(userRepository.findByUser_id(userId)).review(review).build();
             review.addLike(like);
             likeRepository.save(like);
             return 1;
