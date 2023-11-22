@@ -1,5 +1,6 @@
 package com.likelion.songyeechallenge.service;
 
+import com.likelion.songyeechallenge.config.JwtTokenProvider;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
 import com.likelion.songyeechallenge.domain.mission.Mission;
@@ -28,10 +29,15 @@ public class ChallengeService {
     private final ChallengeRepository challengeRepository;
     private final PictureService pictureService;
     private final MissionService missionService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public Challenge postChallenge(ChallengeSaveRequestDto requestDto, MultipartFile file) {
+    public Challenge postChallenge(ChallengeSaveRequestDto requestDto, MultipartFile file, String jwtToken) {
         Challenge challenge = challengeRepository.save(requestDto.toEntity());
+
+        String writer = jwtTokenProvider.getUserMajorFromToken(jwtToken) + " " + jwtTokenProvider.getUserNameFromToken(jwtToken);
+        challenge.setWriter(writer);
+
         Picture picture = pictureService.uploadPicture(file);
         picture.setChallenge(challenge);
 
@@ -67,5 +73,12 @@ public class ChallengeService {
         Challenge challenge = challengeRepository.findById(challenge_id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + challenge_id));
         return new ChallengeDetailResponseDto(challenge, pictureService);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ChallengeListResponseDto> search(String searchWord) {
+        return challengeRepository.findByTitleOrCategory(searchWord).stream()
+                .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
+                .collect(Collectors.toList());
     }
 }

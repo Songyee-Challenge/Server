@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -44,7 +45,12 @@ public class Challenge {
     private Picture picture;
 
     @ManyToMany
-    private Set<User> participants;
+    @JoinTable(
+            name = "challenge_participants",
+            joinColumns = @JoinColumn(name = "challenge_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> participants = new HashSet<>();
 
     @Builder
     public Challenge(String title, String writer, String startDate, String endDate, String category, String explain, Picture picture) {
@@ -59,5 +65,9 @@ public class Challenge {
 
     public void setMissions(List<Mission> missionList) {
         this.missions = missionList;
+    }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
     }
 }

@@ -2,10 +2,10 @@ package com.likelion.songyeechallenge.web.dto;
 
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.picture.Picture;
+import com.likelion.songyeechallenge.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Getter
@@ -35,7 +35,6 @@ public class ChallengeSaveRequestDto {
     public Challenge toEntity() {
         return Challenge.builder()
                 .title(title)
-                .writer(writer)
                 .startDate(startDate)
                 .endDate(endDate)
                 .category(category)
