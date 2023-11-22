@@ -5,6 +5,8 @@ import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
 import com.likelion.songyeechallenge.domain.mission.Mission;
 import com.likelion.songyeechallenge.domain.picture.Picture;
+import com.likelion.songyeechallenge.domain.user.User;
+import com.likelion.songyeechallenge.domain.user.UserRepository;
 import com.likelion.songyeechallenge.web.dto.ChallengeDetailResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeSaveRequestDto;
@@ -27,6 +29,7 @@ public class ChallengeService {
     String formatedToday = today.format(formatter);
 
     private final ChallengeRepository challengeRepository;
+    private final UserRepository userRepository;
     private final PictureService pictureService;
     private final MissionService missionService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -43,6 +46,9 @@ public class ChallengeService {
 
         List<Mission> missions = missionService.uploadMission(requestDto.getMissions(), challenge);
         challenge.setMissions(missions);
+
+        User author = userRepository.findByUser_id(jwtTokenProvider.getUserIdFromToken(jwtToken));
+        challenge.getParticipants().add(author);
 
         challengeRepository.save(challenge);
         return challenge;
