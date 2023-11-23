@@ -4,27 +4,33 @@ import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.mission.Mission;
 import lombok.Getter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 public class MyMissionResponseDto {
 
     private static String filePath = "./src/main/resources/static/images/";
-    private Long mission_id;
-    private String missionDate;
-    private String missions;
-    private boolean isComplete;
+
     private Long challenge_id;
     private String title;
-    private String pictureName;
+    private String explain;
+    private String picture;
+    private List<MissionResponseDto> missions;
+    private int missionCount;
+    private int completedCount;
 
-    public MyMissionResponseDto(Mission mission) {
-        this.mission_id = mission.getMission_id();
-        this.missionDate = mission.getMissionDate();
-        this.missions = mission.getMission();
-        this.isComplete = mission.isComplete();
+    public MyMissionResponseDto(Challenge entity) {
+        this.challenge_id = entity.getChallenge_id();
+        this.title = entity.getTitle() + " " + entity.getCategory();
+        this.explain = entity.getExplain();
+        this.picture = filePath + entity.getPicture().getNewName();
+        this.missions = convertMissionDto(entity.getMissions());
+        this.missionCount = entity.getMissions().size();
+    }
 
-        Challenge challenge = mission.getChallenge();
-        this.challenge_id = challenge.getChallenge_id();
-        this.title = challenge.getTitle() + " " + challenge.getCategory();
-        this.pictureName = filePath + challenge.getPicture().getNewName();
+    private List<MissionResponseDto> convertMissionDto(List<Mission> missions) {
+        return missions.stream().map(mission -> new MissionResponseDto(mission.getMissionDate(), mission.getMission()))
+                .collect(Collectors.toList());
     }
 }

@@ -94,16 +94,8 @@ public class MyPageService {
         User user = userRepository.findByUser_id(userId);
         Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(user.getUser_id());
 
-        List<MyMissionResponseDto> myMissions = new ArrayList<>();
-
-        for (Challenge challenge : participatedChallenges) {
-            List<Mission> missionForChallenge = missionRepository.findByChallengeId(challenge.getChallenge_id());
-
-            myMissions.addAll(missionForChallenge.stream()
-                    .map(MyMissionResponseDto::new)
-                    .collect(Collectors.toList())
-            );
-        }
-        return myMissions;
+        return participatedChallenges.stream()
+                .map(MyMissionResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
