@@ -28,4 +28,23 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
 
     @Query("SELECT c FROM Challenge c JOIN c.participants p WHERE p.user_id = :userId")
     Set<Challenge> findByParticipants(@Param("userId") Long userId);
+
+    // 예정된 챌린지
+    @Query("SELECT c FROM Challenge c JOIN c.participants p WHERE p.user_id = :userId AND c.startDate > :today")
+    Set<Challenge> findMyUpcomingChallenges(@Param("userId") Long userId, @Param("today") String today);
+
+
+    @Query("SELECT DISTINCT c FROM Challenge c " +
+            "LEFT JOIN c.participants p " +
+            "WHERE (c.startDate > :formattedToday) " +
+            "AND c.writer = :userEmail " +
+            "ORDER BY c.challenge_id DESC")
+    List<Challenge> findUpcomingChallengesByCreator(@Param("userEmail") String userEmail, @Param("formattedToday") String formattedToday);
+
+    List<Challenge> findUpcomingChallengesByParticipant(String participantEmail, String today);
+
+    List<Challenge> findOngoingChallenges(String userEmail, String today);
+
+    List<Challenge> findFinishedChallenges(String userEmail, String today);
+
 }

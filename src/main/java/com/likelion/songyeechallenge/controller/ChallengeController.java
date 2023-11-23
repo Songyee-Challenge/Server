@@ -54,4 +54,6 @@ public class ChallengeController {
     public List<ChallengeListResponseDto> searchChallenge(@RequestParam("searchWord") String searchWord) {
         return challengeService.search(searchWord);
     }
+
+
 }
