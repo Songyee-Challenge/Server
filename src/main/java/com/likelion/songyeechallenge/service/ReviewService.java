@@ -39,7 +39,7 @@ public class ReviewService {
         Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(user.getUser_id());
 
         return participatedChallenges.stream()
-                .map(challenge -> new ReviewChallengeDto(challenge.getTitle(), challenge.getCategory()))
+                .map(ReviewChallengeDto::new)
                 .collect(Collectors.toList());
     }
 

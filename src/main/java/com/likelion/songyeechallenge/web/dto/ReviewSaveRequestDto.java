@@ -9,17 +9,18 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ReviewSaveRequestDto {
+
     private String title;
     private String myChallenge;
     private String content;
     private String writer;
 
     @Builder
-    public ReviewSaveRequestDto(String title, String myChallenge, String content, String writer) {
-        this.title = title;
-        this.myChallenge = myChallenge;
-        this.content = content;
-        this.writer = writer;
+    public ReviewSaveRequestDto(Review entity) {
+        this.title = entity.getTitle();
+        this.myChallenge = entity.getMyChallenge();
+        this.content = entity.getContent();
+        this.writer = entity.getWriter();
     }
 
     public Review toEntity() {
