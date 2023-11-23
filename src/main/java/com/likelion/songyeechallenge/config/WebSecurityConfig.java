@@ -29,8 +29,10 @@ public class WebSecurityConfig {
                         try {
                             authz
                                     .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                                    .antMatchers("/home/**", "/api/v1/user/**", "/h2-console/**").permitAll()
+                                    .antMatchers("/home/**", "/api/v1/user/**", "/h2-console/**", "/api/v1/signup/**").permitAll()
                                     .anyRequest().authenticated()
+//                                    .and()
+//                                    .csrf().ignoringAntMatchers("/api/v1/signup/**") // csrf disable 설정
                             .and()
                                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                             .and()

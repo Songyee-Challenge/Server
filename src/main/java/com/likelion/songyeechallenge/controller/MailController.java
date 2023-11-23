@@ -4,28 +4,25 @@ import com.likelion.songyeechallenge.VO.MailVo;
 import com.likelion.songyeechallenge.service.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("user")
+@RequestMapping("/api/v1/signup")
 public class MailController {
 
     private final MailService mailService;
 
-    @GetMapping("/mail")
+    @GetMapping("/email")
     public String MailPage(){
         return "Mail";
     }
 
     @ResponseBody
-    @PostMapping("/mail")
-    public String MailSend(String mail){
+    @PostMapping("/email")
+    public String MailSend(@RequestBody MailVo mailVo){
 
-        int number = mailService.sendMail(mail);
+        int number = mailService.sendMail(mailVo.getEmail());
 
         String num = "" + number;
 
