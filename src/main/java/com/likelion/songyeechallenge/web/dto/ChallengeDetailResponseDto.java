@@ -39,7 +39,7 @@ public class ChallengeDetailResponseDto {
     }
 
     private List<MissionResponseDto> convertMissionDto(List<Mission> missions) {
-        return missions.stream().map(mission -> new MissionResponseDto(mission.getMissionDate(), mission.getMission()))
+        return missions.stream().map(MissionResponseDto::new)
                 .collect(Collectors.toList());
     }
 
