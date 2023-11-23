@@ -7,7 +7,6 @@ import com.likelion.songyeechallenge.domain.mission.Mission;
 import com.likelion.songyeechallenge.domain.mission.MissionRepository;
 import com.likelion.songyeechallenge.domain.review.Review;
 import com.likelion.songyeechallenge.domain.review.ReviewRepository;
-import com.likelion.songyeechallenge.domain.user.User;
 import com.likelion.songyeechallenge.domain.user.UserRepository;
 import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
 import com.likelion.songyeechallenge.web.dto.MyMissionResponseDto;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,24 +41,22 @@ public class MyPageService {
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findMyRecruiting(String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        User user = userRepository.findByUser_id(userId);
-        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(user.getUser_id());
+        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
 
         return challengeRepository.findBeforeStartDesc(formattedToday).stream()
                 .filter(participatedChallenges::contains)
-                .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
+                .map(ChallengeListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findMyInProcess(String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        User user = userRepository.findByUser_id(userId);
-        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(user.getUser_id());
+        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
 
         return challengeRepository.findInProcessDesc(formattedToday).stream()
                 .filter(participatedChallenges::contains)
-                .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
+                .map(ChallengeListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
@@ -68,20 +64,18 @@ public class MyPageService {
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findMyFinished(String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        User user = userRepository.findByUser_id(userId);
-        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(user.getUser_id());
+        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
 
         return challengeRepository.findFinishedDesc(formattedToday).stream()
                 .filter(participatedChallenges::contains)
-                .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
+                .map(ChallengeListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<MyReviewResponseDto> findMyReview(String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        User user = userRepository.findByUser_id(userId);
-        List<Review> reviews = reviewRepository.findByUser(user.getUser_id());
+        List<Review> reviews = reviewRepository.findByUser(userId);
 
         return reviews.stream()
                 .map(MyReviewResponseDto::new)
@@ -91,8 +85,7 @@ public class MyPageService {
     @Transactional(readOnly = true)
     public List<MyMissionResponseDto> findMyChallengeAndMission(String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        User user = userRepository.findByUser_id(userId);
-        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(user.getUser_id());
+        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
 
         return participatedChallenges.stream()
                 .map(MyMissionResponseDto::new)
@@ -102,7 +95,6 @@ public class MyPageService {
     @Transactional
     public boolean isCompleteMission(Long missionId, Long challengeId, String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        // User user = userRepository.findByUser_id(userId);
 
         Mission mission = missionRepository.findMyMissionCompleteness(userId, missionId, challengeId);
         mission.setComplete(!mission.isComplete());

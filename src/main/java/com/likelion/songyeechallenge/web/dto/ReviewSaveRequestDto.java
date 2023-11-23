@@ -1,7 +1,6 @@
 package com.likelion.songyeechallenge.web.dto;
 
 import com.likelion.songyeechallenge.domain.review.Review;
-import com.likelion.songyeechallenge.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

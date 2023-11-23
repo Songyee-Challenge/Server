@@ -35,8 +35,7 @@ public class ReviewService {
     @Transactional
     public List<ReviewChallengeDto> findMyChallenge(String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        User user = userRepository.findByUser_id(userId);
-        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(user.getUser_id());
+        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
 
         return participatedChallenges.stream()
                 .map(ReviewChallengeDto::new)
