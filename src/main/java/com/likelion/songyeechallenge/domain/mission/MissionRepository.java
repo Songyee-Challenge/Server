@@ -14,6 +14,9 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
     @Query("SELECT m FROM Mission m WHERE m.challenge.challenge_id = :challengeId")
     List<Mission> findByChallengeId(Long challengeId);
 
-    @Query("SELECT m FROM Mission m WHERE m.user.user_id = :userId AND m.mission_id = :missionId AND m.challenge.challenge_id = :challengeId")
+    @Query("SELECT m FROM Mission m " +
+            "JOIN m.user u " +
+            "JOIN m.challenge c " +
+            "WHERE u.user_id = :userId AND m.mission_id = :missionId AND c.challenge_id = :challengeId")
     Mission findMyMissionCompleteness(Long userId, Long missionId, Long challengeId);
 }
