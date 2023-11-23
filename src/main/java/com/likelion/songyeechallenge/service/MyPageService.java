@@ -98,4 +98,15 @@ public class MyPageService {
                 .map(MyMissionResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public boolean isCompleteMission(Long missionId, Long challengeId, String jwtToken) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        // User user = userRepository.findByUser_id(userId);
+
+        Mission mission = missionRepository.findMyMissionCompleteness(userId, missionId, challengeId);
+        mission.setComplete(!mission.isComplete());
+        missionRepository.save(mission);
+        return mission.isComplete();
+    }
 }

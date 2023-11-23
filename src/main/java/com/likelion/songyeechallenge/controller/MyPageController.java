@@ -5,10 +5,7 @@ import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
 import com.likelion.songyeechallenge.web.dto.MyMissionResponseDto;
 import com.likelion.songyeechallenge.web.dto.MyReviewResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,5 +44,11 @@ public class MyPageController {
     public List<MyMissionResponseDto> getUserMissions(@RequestHeader("Authorization") String authorizationHeader) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         return myPageService.findMyChallengeAndMission(jwtToken);
+    }
+
+    @PostMapping("/mission/{missionId}/{challengeId}")
+    public boolean isCompleteMission(@PathVariable("missionId") Long missionId, @PathVariable("challengeId") Long challengeId, @RequestHeader("Authorization") String authorizationHeader) {
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        return myPageService.isCompleteMission(missionId, challengeId, jwtToken);
     }
 }

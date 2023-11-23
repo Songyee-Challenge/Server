@@ -107,8 +107,10 @@ public class ChallengeService {
         challengeRepository.save(challenge);
 
         List<Mission> missionsForChallenge = missionRepository.findByChallengeId(challenge.getChallenge_id());
+
         for (Mission mission : missionsForChallenge) {
             mission.setUser(participant);
+            mission.setChallenge(challenge);
             missionRepository.save(mission);
         }
 
