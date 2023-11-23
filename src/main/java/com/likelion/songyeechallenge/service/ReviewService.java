@@ -46,6 +46,11 @@ public class ReviewService {
     @Transactional
     public Review postReview(ReviewSaveRequestDto requestDto, String jwtToken) {
         Review review = reviewRepository.save(requestDto.toEntity());
+
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        User user = userRepository.findByUser_id(userId);
+        review.setUser(user);
+
         String writer = jwtTokenProvider.getUserMajorFromToken(jwtToken) + " " + jwtTokenProvider.getUserNameFromToken(jwtToken);
         review.setWriter(writer);
 

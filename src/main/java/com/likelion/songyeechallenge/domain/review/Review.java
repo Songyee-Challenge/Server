@@ -3,6 +3,7 @@ package com.likelion.songyeechallenge.domain.review;
 import com.likelion.songyeechallenge.domain.BaseTimeEntity;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.likes.Like;
+import com.likelion.songyeechallenge.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +39,9 @@ public class Review extends BaseTimeEntity {
     @OneToMany(mappedBy = "review")
     private List<Like> likes = new ArrayList<>();
 
+    @ManyToOne
+    private User user;
+
     @Builder
     public Review(String title, String myChallenge, String content, String writer) {
         this.title = title;
@@ -49,6 +53,10 @@ public class Review extends BaseTimeEntity {
 
     public void setWriter(String writer) {
         this.writer = writer;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void addLike(Like like) {
