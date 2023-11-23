@@ -1,6 +1,5 @@
 package com.likelion.songyeechallenge.domain.auth;
 
-import com.likelion.songyeechallenge.domain.auth.Auth;
 import com.likelion.songyeechallenge.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

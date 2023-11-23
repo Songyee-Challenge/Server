@@ -2,7 +2,6 @@ package com.likelion.songyeechallenge.web.dto;
 
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.picture.Picture;
-import com.likelion.songyeechallenge.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,15 +20,14 @@ public class ChallengeSaveRequestDto {
     private Picture picture;
 
     @Builder
-    public ChallengeSaveRequestDto(String title, String writer, String startDate, String endDate, String category, String explain, List<MissionSaveRequestDto> missions, Picture picture) {
-        this.title = title;
-        this.writer = writer;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.category = category;
-        this.explain = explain;
-        this.missions = missions;
-        this.picture = picture;
+    public ChallengeSaveRequestDto(Challenge challenge) {
+        this.title = challenge.getTitle();
+        this.writer = challenge.getWriter();
+        this.startDate = challenge.getStartDate();
+        this.endDate = challenge.getEndDate();
+        this.category = challenge.getCategory();
+        this.explain = challenge.getExplain();
+        this.picture = challenge.getPicture();
     }
 
     public Challenge toEntity() {

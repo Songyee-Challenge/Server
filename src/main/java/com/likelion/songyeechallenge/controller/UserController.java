@@ -7,12 +7,6 @@ import com.likelion.songyeechallenge.service.UserService;
 import com.likelion.songyeechallenge.config.dto.LoginRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user")

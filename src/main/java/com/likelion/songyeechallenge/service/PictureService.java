@@ -19,7 +19,7 @@ import java.util.UUID;
 @Service
 public class PictureService {
 
-    private String uploadDir = "./src/main/resources/static/images";
+    private static String uploadDir = "./src/main/resources/static/images";
     private final PictureRepository pictureRepository;
 
     @Transactional

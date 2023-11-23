@@ -21,26 +21,25 @@ public class MainPageService {
     private String formatedToday = today.format(formatter);
 
     private final ChallengeRepository challengeRepository;
-    private final PictureService pictureService;
 
     public List<MainPageResponseDto> findResentRecruitPost() {
         List<Challenge> challenges = challengeRepository.findBeforeStartDesc(formatedToday);
         return challenges.stream().limit(4)
-                .map(challenge -> new MainPageResponseDto(challenge, pictureService))
+                .map(MainPageResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     public List<MainPageResponseDto> findHotInProcessPost() {
         List<Challenge> challenges = challengeRepository.findInProcessHot(formatedToday);
         return challenges.stream().limit(8)
-                .map(challenge -> new MainPageResponseDto(challenge, pictureService))
+                .map(MainPageResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     public List<ChallengeListResponseDto> findByCategory(String category) {
         List<Challenge> challenges = challengeRepository.findByCategory(category);
         return challenges.stream()
-                .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
+                .map(ChallengeListResponseDto::new)
                 .collect(Collectors.toList());
     }
 }

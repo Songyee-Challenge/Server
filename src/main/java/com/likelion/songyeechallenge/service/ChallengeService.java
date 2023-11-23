@@ -34,8 +34,8 @@ public class ChallengeService {
     private final ChallengeRepository challengeRepository;
     private final UserRepository userRepository;
     private final MissionRepository missionRepository;
-    private final PictureService pictureService;
     private final MissionService missionService;
+    private final PictureService pictureService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
@@ -68,34 +68,34 @@ public class ChallengeService {
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findRecruitingPost() {
         return challengeRepository.findBeforeStartDesc(formattedToday).stream()
-                .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
+                .map(ChallengeListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findInProcessPost() {
         return challengeRepository.findInProcessDesc(formattedToday).stream()
-                .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
+                .map(ChallengeListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findFinishedPost() {
         return challengeRepository.findFinishedDesc(formattedToday).stream()
-                .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
+                .map(ChallengeListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     public ChallengeDetailResponseDto findById(Long challenge_id) {
         Challenge challenge = challengeRepository.findById(challenge_id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + challenge_id));
-        return new ChallengeDetailResponseDto(challenge, pictureService);
+        return new ChallengeDetailResponseDto(challenge);
     }
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> search(String searchWord) {
         return challengeRepository.findByTitleOrCategory(searchWord).stream()
-                .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
+                .map(ChallengeListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
