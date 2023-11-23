@@ -55,5 +55,10 @@ public class ChallengeController {
         return challengeService.search(searchWord);
     }
 
-
+    @PostMapping("/register/{id}")
+    public Long registerChallenge(@PathVariable("id") Long challengeId, @RequestHeader("Authorization") String authorizationHeader) {
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        Long participantId = challengeService.joinChallenge(challengeId, jwtToken);
+        return participantId;
+    }
 }

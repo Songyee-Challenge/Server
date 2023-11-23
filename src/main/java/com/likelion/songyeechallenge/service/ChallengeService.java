@@ -6,6 +6,8 @@ import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
 import com.likelion.songyeechallenge.domain.mission.Mission;
 import com.likelion.songyeechallenge.domain.picture.Picture;
+import com.likelion.songyeechallenge.domain.user.User;
+import com.likelion.songyeechallenge.domain.user.UserRepository;
 import com.likelion.songyeechallenge.web.dto.ChallengeDetailResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeSaveRequestDto;
@@ -32,6 +34,7 @@ public class ChallengeService {
     String formatedToday = today.format(formatter);
 
     private final ChallengeRepository challengeRepository;
+    private final UserRepository userRepository;
     private final PictureService pictureService;
     private final MissionService missionService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -48,6 +51,9 @@ public class ChallengeService {
 
         List<Mission> missions = missionService.uploadMission(requestDto.getMissions(), challenge);
         challenge.setMissions(missions);
+
+        User author = userRepository.findByUser_id(jwtTokenProvider.getUserIdFromToken(jwtToken));
+        challenge.getParticipants().add(author);
 
         challengeRepository.save(challenge);
         return challenge;
@@ -88,62 +94,13 @@ public class ChallengeService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
-    public List<ChallengeListResponseDto> findUpcomingChallenges(String userEmail, String formattedToday) {
-        // 사용자가 개설했거나 개설 신청한 아직 시작되지 않은 챌린지 가져오기
-        List<ChallengeListResponseDto> userCreatedUpcomingChallenges = challengeRepository.findUpcomingChallengesByCreator(userEmail, formattedToday)
-                .stream()
-                .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
-                .collect(Collectors.toList());
+    @Transactional
+    public Long joinChallenge(Long challengeId, String jwtToken) {
+        User participant = userRepository.findByUser_id(jwtTokenProvider.getUserIdFromToken(jwtToken));
+        Challenge challenge = challengeRepository.findByChallenge_id(challengeId);
+        challenge.getParticipants().add(participant);
+        challengeRepository.save(challenge);
 
-        // 사용자가 참가한 아직 시작되지 않은 챌린지 가져오기
-        List<ChallengeListResponseDto> userParticipatedUpcomingChallenges = challengeRepository.findUpcomingChallengesByParticipant(userEmail, formattedToday)
-                .stream()
-                .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
-                .collect(Collectors.toList());
-
-        // 중복 제거 후 합치기
-        Set<Long> uniqueChallengeIds = new HashSet<>();
-        uniqueChallengeIds.addAll(
-                userCreatedUpcomingChallenges.stream()
-                        .map(challenge -> challenge.getChallengeId())
-                        .collect(Collectors.toList()));
-        uniqueChallengeIds.addAll(
-                userParticipatedUpcomingChallenges.stream()
-                        .map(challenge -> challenge.getChallengeId())
-                        .collect(Collectors.toList()));
-
-        List<ChallengeListResponseDto> allUpcomingChallenges = uniqueChallengeIds.stream()
-                .map(challengeId -> challengeRepository.findById(challengeId).orElse(null))
-                .filter(Objects::nonNull)
-                .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
-                .collect(Collectors.toList());
-
-
-        return allUpcomingChallenges;
+        return participant.getUser_id();
     }
-
-    @Transactional(readOnly = true)
-    public List<ChallengeListResponseDto> findOngoingChallenges(String userEmail) {
-        // 진행 중인 챌린지 가져오기
-        List<ChallengeListResponseDto> ongoingChallenges = challengeRepository.findOngoingChallenges(userEmail, formatedToday)
-                .stream()
-                .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
-                .collect(Collectors.toList());
-
-        return ongoingChallenges;
-    }
-
-    @Transactional(readOnly = true)
-    public List<ChallengeListResponseDto> findFinishedChallenges(String userEmail, String formattedToday) {
-        // 종료된 챌린지 가져오기
-        List<ChallengeListResponseDto> finishedChallenges = challengeRepository.findFinishedChallenges(userEmail, formattedToday)
-                .stream()
-                .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
-                .collect(Collectors.toList());
-
-        return finishedChallenges;
-    }
-
-
 }
