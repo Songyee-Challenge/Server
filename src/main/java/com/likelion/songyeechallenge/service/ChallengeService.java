@@ -1,7 +1,6 @@
 package com.likelion.songyeechallenge.service;
 
 import com.likelion.songyeechallenge.config.JwtTokenProvider;
-import com.likelion.songyeechallenge.config.dto.MyChallengeListResponseDto;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
 import com.likelion.songyeechallenge.domain.mission.Mission;
@@ -12,11 +11,8 @@ import com.likelion.songyeechallenge.web.dto.ChallengeDetailResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeSaveRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -28,10 +24,9 @@ import java.util.stream.Collectors;
 @Service
 public class ChallengeService {
 
-    private final ChallengeService challengeService;
     private LocalDate today = LocalDate.now();
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-    String formatedToday = today.format(formatter);
+    String formattedToday = today.format(formatter);
 
     private final ChallengeRepository challengeRepository;
     private final UserRepository userRepository;
@@ -41,7 +36,7 @@ public class ChallengeService {
 
     @Transactional
     public Challenge postChallenge(ChallengeSaveRequestDto requestDto, MultipartFile file, String jwtToken) {
-        Challenge challenge = challengeRepository.save(requestDto.toEntity());
+        com.likelion.songyeechallenge.domain.challenge.Challenge challenge = challengeRepository.save(requestDto.toEntity());
 
         String writer = jwtTokenProvider.getUserMajorFromToken(jwtToken) + " " + jwtTokenProvider.getUserNameFromToken(jwtToken);
         challenge.setWriter(writer);
@@ -61,22 +56,21 @@ public class ChallengeService {
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findRecruitingPost() {
-        return challengeRepository.findBeforeStartDateDesc(formatedToday).stream()
+        return challengeRepository.findBeforeStartDesc(formattedToday).stream()
                 .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
                 .collect(Collectors.toList());
     }
 
-
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findInProcessPost() {
-        return challengeRepository.findBetweenStartDateAndEndDateDesc(formatedToday).stream()
+        return challengeRepository.findInProcessDesc(formattedToday).stream()
                 .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findFinishedPost() {
-        return challengeRepository.findAfterEndDateDesc(formatedToday).stream()
+        return challengeRepository.findFinishedDesc(formattedToday).stream()
                 .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
                 .collect(Collectors.toList());
     }
