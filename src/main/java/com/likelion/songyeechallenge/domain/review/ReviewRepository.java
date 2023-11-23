@@ -10,4 +10,7 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT r FROM Review r ORDER BY r.review_id DESC")
     List<Review> findAllDesc();
+
+    @Query("SELECT r FROM Review r WHERE r.user.user_id = :userId")
+    List<Review> findByUser(Long userId);
 }
