@@ -99,12 +99,14 @@ public class MyPageService {
                 .collect(Collectors.toList());
     }
 
-//    @Transactional
-//    public boolean isCompleteMission(String jwtToken) {
-//        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-//        User user = userRepository.findByUser_id(userId);
-//        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(user.getUser_id());
-//
-//
-//    }
+    @Transactional
+    public boolean isCompleteMission(Long missionId, Long challengeId, String jwtToken) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        // User user = userRepository.findByUser_id(userId);
+
+        Mission mission = missionRepository.findMyMissionCompleteness(userId, missionId, challengeId);
+        mission.setComplete(!mission.isComplete());
+        missionRepository.save(mission);
+        return mission.isComplete();
+    }
 }
