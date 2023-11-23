@@ -3,6 +3,7 @@ package com.likelion.songyeechallenge.domain.user;
 import com.likelion.songyeechallenge.domain.auth.Auth;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.likes.Like;
+import com.likelion.songyeechallenge.domain.mission.Mission;
 import com.likelion.songyeechallenge.domain.review.Review;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,6 +50,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Mission> missions = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Auth auth;

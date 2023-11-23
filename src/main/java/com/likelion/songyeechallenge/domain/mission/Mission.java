@@ -1,6 +1,7 @@
 package com.likelion.songyeechallenge.domain.mission;
 
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
+import com.likelion.songyeechallenge.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,10 @@ public class Mission {
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Builder
     public Mission(String missionDate, String mission) {
         this.missionDate = missionDate;
@@ -35,5 +40,9 @@ public class Mission {
 
     public void setChallenge(Challenge challenge) {
         this.challenge = challenge;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -4,6 +4,7 @@ import com.likelion.songyeechallenge.config.JwtTokenProvider;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
 import com.likelion.songyeechallenge.domain.mission.Mission;
+import com.likelion.songyeechallenge.domain.mission.MissionRepository;
 import com.likelion.songyeechallenge.domain.picture.Picture;
 import com.likelion.songyeechallenge.domain.user.User;
 import com.likelion.songyeechallenge.domain.user.UserRepository;
@@ -11,6 +12,7 @@ import com.likelion.songyeechallenge.web.dto.ChallengeDetailResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeSaveRequestDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ChallengeService {
@@ -30,13 +33,14 @@ public class ChallengeService {
 
     private final ChallengeRepository challengeRepository;
     private final UserRepository userRepository;
+    private final MissionRepository missionRepository;
     private final PictureService pictureService;
     private final MissionService missionService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public Challenge postChallenge(ChallengeSaveRequestDto requestDto, MultipartFile file, String jwtToken) {
-        com.likelion.songyeechallenge.domain.challenge.Challenge challenge = challengeRepository.save(requestDto.toEntity());
+        Challenge challenge = challengeRepository.save(requestDto.toEntity());
 
         String writer = jwtTokenProvider.getUserMajorFromToken(jwtToken) + " " + jwtTokenProvider.getUserNameFromToken(jwtToken);
         challenge.setWriter(writer);
@@ -51,6 +55,13 @@ public class ChallengeService {
         challenge.getParticipants().add(author);
 
         challengeRepository.save(challenge);
+
+        List<Mission> missionsForChallenge = missionRepository.findByChallengeId(challenge.getChallenge_id());
+        for (Mission mission : missionsForChallenge) {
+            mission.setUser(author);
+            missionRepository.save(mission);
+        }
+
         return challenge;
     }
 
@@ -94,6 +105,12 @@ public class ChallengeService {
         Challenge challenge = challengeRepository.findByChallenge_id(challengeId);
         challenge.getParticipants().add(participant);
         challengeRepository.save(challenge);
+
+        List<Mission> missionsForChallenge = missionRepository.findByChallengeId(challenge.getChallenge_id());
+        for (Mission mission : missionsForChallenge) {
+            mission.setUser(participant);
+            missionRepository.save(mission);
+        }
 
         return participant.getUser_id();
     }

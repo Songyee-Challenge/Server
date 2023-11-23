@@ -2,8 +2,8 @@ package com.likelion.songyeechallenge.controller;
 
 import com.likelion.songyeechallenge.service.MyPageService;
 import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
+import com.likelion.songyeechallenge.web.dto.MyMissionResponseDto;
 import com.likelion.songyeechallenge.web.dto.MyReviewResponseDto;
-import com.likelion.songyeechallenge.web.dto.ReviewListResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -43,9 +43,9 @@ public class MyPageController {
         return myPageService.findMyReview(jwtToken);
     }
 
-//    @GetMapping("/missions")
-//    public List<MyMissionResponseDto> getUserMissions(@AuthenticationPrincipal JwtAuthenticationToken jwtAuthenticationToken) {
-//        String jwtToken = jwtAuthenticationToken.getToken().getTokenValue();
-//        return myPageService.getUserMissions(jwtToken);
-//    }
+    @GetMapping("/mission")
+    public List<MyMissionResponseDto> getUserMissions(@RequestHeader("Authorization") String authorizationHeader) {
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        return myPageService.findMyChallengeAndMission(jwtToken);
+    }
 }
