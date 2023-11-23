@@ -18,7 +18,7 @@ public class MainPageController {
 
     private final MainPageService mainPageService;
 
-    @GetMapping("/recruit")
+    @GetMapping("/recruiting")
     public List<MainPageResponseDto> getRecentRecruitingChallenge() {
         return mainPageService.findResentRecruitPost();
     }

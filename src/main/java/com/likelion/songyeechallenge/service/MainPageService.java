@@ -24,14 +24,14 @@ public class MainPageService {
     private final PictureService pictureService;
 
     public List<MainPageResponseDto> findResentRecruitPost() {
-        List<Challenge> challenges = challengeRepository.findBeforeStartDateDesc(formatedToday);
+        List<Challenge> challenges = challengeRepository.findBeforeStartDesc(formatedToday);
         return challenges.stream().limit(4)
                 .map(challenge -> new MainPageResponseDto(challenge, pictureService))
                 .collect(Collectors.toList());
     }
 
     public List<MainPageResponseDto> findHotInProcessPost() {
-        List<Challenge> challenges = challengeRepository.findBetweenStartDateAndEndDateHot(formatedToday);
+        List<Challenge> challenges = challengeRepository.findInProcessHot(formatedToday);
         return challenges.stream().limit(8)
                 .map(challenge -> new MainPageResponseDto(challenge, pictureService))
                 .collect(Collectors.toList());

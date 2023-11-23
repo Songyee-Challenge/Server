@@ -70,16 +70,4 @@ public class Challenge {
     public void setWriter(String writer) {
         this.writer = writer;
     }
-
-    public Long getChallengeId() {
-        return challenge_id;
-    }
-
-    public Picture getPicture(){
-        return picture;
-    }
-
-    public String getWriter() {
-        return writer;
-    }
 }

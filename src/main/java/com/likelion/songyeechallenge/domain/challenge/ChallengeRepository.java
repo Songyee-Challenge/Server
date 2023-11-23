@@ -10,16 +10,16 @@ import java.util.Set;
 
 public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
     @Query("SELECT c FROM Challenge c WHERE c.startDate > :today ORDER BY c.challenge_id DESC")
-    List<Challenge> findBeforeStartDateDesc(String today);
+    List<Challenge> findBeforeStartDesc(String today);
 
     @Query("SELECT c FROM Challenge c WHERE c.startDate <= :today AND c.endDate >= :today ORDER BY c.challenge_id DESC")
-    List<Challenge> findBetweenStartDateAndEndDateDesc(String today);
+    List<Challenge> findInProcessDesc(String today);
 
     @Query("SELECT c FROM Challenge c WHERE c.endDate < :today ORDER BY c.challenge_id DESC")
-    List<Challenge> findAfterEndDateDesc(String today);
+    List<Challenge> findFinishedDesc(String today);
 
     @Query("SELECT c FROM Challenge c WHERE c.startDate <= :today AND c.endDate >= :today ORDER BY c.participants.size DESC")
-    List<Challenge> findBetweenStartDateAndEndDateHot(String today);
+    List<Challenge> findInProcessHot(String today);
 
     List<Challenge> findByCategory(String category);
 

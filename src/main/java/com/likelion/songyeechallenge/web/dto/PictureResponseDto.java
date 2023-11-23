@@ -14,7 +14,7 @@ public class PictureResponseDto {
     private String fileUrl;
 
     @Builder
-    public PictureResponseDto(Picture fileName, PictureService fileUrl) {
+    public PictureResponseDto(String fileName, String fileUrl) {
         this.fileName = fileName;
         this.fileUrl = fileUrl;
     }
