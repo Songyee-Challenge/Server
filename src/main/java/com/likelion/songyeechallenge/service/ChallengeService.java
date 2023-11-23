@@ -1,6 +1,7 @@
 package com.likelion.songyeechallenge.service;
 
 import com.likelion.songyeechallenge.config.JwtTokenProvider;
+import com.likelion.songyeechallenge.config.dto.MyChallengeListResponseDto;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
 import com.likelion.songyeechallenge.domain.mission.Mission;
@@ -11,19 +12,23 @@ import com.likelion.songyeechallenge.web.dto.ChallengeDetailResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeSaveRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class ChallengeService {
 
+    private final ChallengeService challengeService;
     private LocalDate today = LocalDate.now();
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
     String formatedToday = today.format(formatter);
@@ -60,6 +65,7 @@ public class ChallengeService {
                 .map(challenge -> new ChallengeListResponseDto(challenge, pictureService))
                 .collect(Collectors.toList());
     }
+
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findInProcessPost() {

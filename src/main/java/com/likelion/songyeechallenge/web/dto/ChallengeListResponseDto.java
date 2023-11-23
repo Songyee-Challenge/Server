@@ -50,4 +50,8 @@ public class ChallengeListResponseDto {
             return Math.round(progress * 100.0) / 100.0;
         }
     }
+
+    public Long getChallengeId() {
+        return challenge_id;
+    }
 }
