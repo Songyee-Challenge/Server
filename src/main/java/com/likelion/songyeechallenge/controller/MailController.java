@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/signup")
+@RequestMapping("/api/v1/user/signup")
 public class MailController {
 
     private final MailService mailService;
