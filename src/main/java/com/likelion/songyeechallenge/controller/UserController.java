@@ -6,6 +6,8 @@ import com.likelion.songyeechallenge.config.dto.SignupRequestDto;
 import com.likelion.songyeechallenge.service.UserService;
 import com.likelion.songyeechallenge.config.dto.LoginRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -25,16 +27,6 @@ public class UserController {
     public String signin(@RequestBody LoginRequestDto loginRequestDto) {
         AuthResponseDto authResponseDto = userService.login(loginRequestDto);
         return authResponseDto.getAccessToken();
-    }
-
-    @RequestMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-    @GetMapping("/home")
-    public String home(){
-        return "home";
     }
 }
 

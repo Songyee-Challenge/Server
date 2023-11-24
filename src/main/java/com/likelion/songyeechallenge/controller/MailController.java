@@ -25,4 +25,14 @@ public class MailController {
         String num = "" + number;
         return num;
     }
+  
+    @ResponseBody
+    @PostMapping("/email/verify")
+    public String VerifyCode(@RequestBody MailVo mailVo) {
+        if (mailVo.getVerificationCode() == mailService.getSavedVerificationCode()) {
+            return "Verification successful!";
+        } else {
+            return "Verification failed. Please check the code.";
+        }
+    }
 }

@@ -12,12 +12,18 @@ import com.likelion.songyeechallenge.domain.user.UserRepository;
 import com.likelion.songyeechallenge.web.dto.ReviewChallengeDto;
 import com.likelion.songyeechallenge.web.dto.ReviewListResponseDto;
 import com.likelion.songyeechallenge.web.dto.ReviewSaveRequestDto;
+import com.likelion.songyeechallenge.web.dto.ReviewUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -71,16 +77,51 @@ public class ReviewService {
 
         Like like = likeRepository.findByUserAndReview(userId, reviewId);
 
-        if(like != null) {
+        if (like != null) {
             review.removeLike(like);
             likeRepository.delete(like);
             return 0;
-        }
-        else {
+        } else {
             like = Like.builder().user(userRepository.findByUser_id(userId)).review(review).build();
             review.addLike(like);
             likeRepository.save(like);
             return 1;
+        }
+    }
+
+    public void deleteReview(Long reviewId) {
+        reviewRepository.deleteById(reviewId);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isReviewCreatedByUser(Long reviewId, String jwtToken) {
+        Long userIdFromToken = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        Optional<Review> optionalReview = reviewRepository.findById(reviewId);
+
+        return optionalReview.map(review -> review.getUser().getUser_id().equals(userIdFromToken)).orElse(false);
+    }
+
+    @Transactional
+    public Review updateReview(Long reviewId, ReviewUpdateRequestDto requestDto) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다. id=" + reviewId));
+
+        // 리뷰를 작성한 사용자와 현재 로그인한 사용자가 일치하는지 확인
+        if (!review.isCreatedByUser(jwtTokenProvider.getUserIdFromToken(requestDto.getToken()))) {
+            throw new UnauthorizedException("리뷰를 수정할 권한이 없습니다.");
+        }
+
+        // 수정할 내용 업데이트
+        review.update(requestDto.getTitle(), requestDto.getContent());
+
+        return review;
+
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public class UnauthorizedException extends RuntimeException {
+        public UnauthorizedException(String message) {
+            super(message);
         }
     }
 }
