@@ -6,11 +6,9 @@ import lombok.Getter;
 @Getter
 public class ReviewChallengeDto {
 
-    private String title;
-    private String category;
+    private String challenge_title;
 
     public ReviewChallengeDto(Challenge entity) {
-        this.title = entity.getTitle();
-        this.category = entity.getCategory();
+        this.challenge_title = entity.getTitle() + " (" + entity.getCategory() + ")";
     }
 }

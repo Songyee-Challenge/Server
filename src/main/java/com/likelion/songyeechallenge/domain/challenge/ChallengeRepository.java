@@ -17,8 +17,11 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
     @Query("SELECT c FROM Challenge c WHERE c.endDate < :today ORDER BY c.challenge_id DESC")
     List<Challenge> findFinishedDesc(String today);
 
-    @Query("SELECT c FROM Challenge c WHERE c.startDate <= :today AND c.endDate >= :today ORDER BY c.participants.size DESC")
-    List<Challenge> findInProcessHot(String today);
+    @Query("SELECT c FROM Challenge c WHERE c.startDate > :today ORDER BY c.participants.size DESC")
+    List<Challenge> findBeforeStartHot(String today);
+
+    @Query("SELECT c FROM Challenge c WHERE c.startDate > :today ORDER BY c.startDate ASC")
+    List<Challenge> findImminent(String today);
 
     List<Challenge> findByCategory(String category);
 

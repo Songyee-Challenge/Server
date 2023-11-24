@@ -12,7 +12,7 @@ public class MyMissionResponseDto {
 
     private static String filePath = "src/main/resources/static/images/";
     private Long challenge_id;
-    private String title;
+    private String challenge_title;
     private String explain;
     private String picture;
     private List<MissionResponseDto> missions;
@@ -21,7 +21,7 @@ public class MyMissionResponseDto {
 
     public MyMissionResponseDto(Challenge entity) {
         this.challenge_id = entity.getChallenge_id();
-        this.title = entity.getTitle() + " " + entity.getCategory();
+        this.challenge_title = entity.getTitle() + " (" + entity.getCategory() + ")";
         this.explain = entity.getExplain();
         this.picture = filePath + entity.getPicture().getNewName();
         this.missions = convertMissionDto(entity.getMissions());

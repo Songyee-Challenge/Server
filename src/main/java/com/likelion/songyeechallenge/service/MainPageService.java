@@ -23,14 +23,14 @@ public class MainPageService {
     private final ChallengeRepository challengeRepository;
 
     public List<MainPageResponseDto> findResentRecruitPost() {
-        List<Challenge> challenges = challengeRepository.findBeforeStartDesc(formatedToday);
+        List<Challenge> challenges = challengeRepository.findImminent(formatedToday);
         return challenges.stream().limit(4)
                 .map(MainPageResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     public List<MainPageResponseDto> findHotInProcessPost() {
-        List<Challenge> challenges = challengeRepository.findInProcessHot(formatedToday);
+        List<Challenge> challenges = challengeRepository.findBeforeStartHot(formatedToday);
         return challenges.stream().limit(8)
                 .map(MainPageResponseDto::new)
                 .collect(Collectors.toList());
