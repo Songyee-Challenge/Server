@@ -18,7 +18,7 @@ public class PictureController {
 
     private static final String imagePath = "src/main/resources/static/images/";
 
-    @GetMapping("/api/v1/picture")
+    @GetMapping("/picture")
     public ResponseEntity<Resource> returnImage(@RequestParam String imageName) {
         String fullPath = Paths.get(imagePath, imageName).toString();
         Resource resource = new FileSystemResource(fullPath);
