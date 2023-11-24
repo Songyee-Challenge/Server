@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 @Getter
 public class ChallengeDetailResponseDto {
-    private static String filePath = "src/main/resources/static/images/";
     private Long challenge_id;
     private String title;
     private String writer;
@@ -34,7 +33,7 @@ public class ChallengeDetailResponseDto {
         this.category = entity.getCategory();
         this.explain = entity.getExplain();
         this.missions = convertMissionDto(entity.getMissions());
-        this.picture = filePath + entity.getPicture().getNewName();
+        this.picture = entity.getPicture().getNewName();
         this.participantsNumber = entity.getParticipants().size();
         this.progressPercent = calculateProgress();
     }
