@@ -5,12 +5,11 @@ import lombok.Getter;
 
 @Getter
 public class MainPageResponseDto {
-    private static String filePath = "src/main/resources/static/images/";
     private Long challenge_id;
     private String picture;
 
     public MainPageResponseDto(Challenge entity) {
         this.challenge_id = entity.getChallenge_id();
-        this.picture = filePath + entity.getPicture().getNewName();
+        this.picture = entity.getPicture().getNewName();
     }
 }

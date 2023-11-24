@@ -19,13 +19,13 @@ public class PictureController {
     private static final String imagePath = "src/main/resources/static/images/";
 
     @GetMapping("/picture")
-    public ResponseEntity<Resource> returnImage(@RequestParam String imageName) {
-        String fullPath = Paths.get(imagePath, imageName).toString();
+    public ResponseEntity<Resource> returnImage(@RequestParam String pictureName) {
+        String fullPath = Paths.get(imagePath, pictureName).toString();
         Resource resource = new FileSystemResource(fullPath);
 
         // Content-Type 설정
         return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=\"" + imageName + "\"")
+                .header("Content-Disposition", "attachment; filename=\"" + pictureName + "\"")
                 .header("Content-Type", "image/png") // 이미지 타입에 맞게 설정
                 .body(resource);
     }
