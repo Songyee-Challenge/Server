@@ -21,14 +21,11 @@ public class MailController {
     @ResponseBody
     @PostMapping("/email")
     public String MailSend(@RequestBody MailVo mailVo){
-
         int number = mailService.sendMail(mailVo.getEmail());
-
         String num = "" + number;
-
         return num;
     }
-
+  
     @ResponseBody
     @PostMapping("/email/verify")
     public String VerifyCode(@RequestBody MailVo mailVo) {

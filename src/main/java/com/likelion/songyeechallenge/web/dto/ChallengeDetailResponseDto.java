@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Getter
 public class ChallengeDetailResponseDto {
+    private static String filePath = "./src/main/resources/static/images/";
     private Long challenge_id;
     private String title;
     private String writer;
@@ -20,11 +21,11 @@ public class ChallengeDetailResponseDto {
     private String category;
     private String explain;
     private List<MissionResponseDto> missions;
-    private String filePath;
+    private String picture;
     private int participantsNumber;
     private double progressPercent;
 
-    public ChallengeDetailResponseDto(Challenge entity, PictureService pictureService) {
+    public ChallengeDetailResponseDto(Challenge entity) {
         this.challenge_id = entity.getChallenge_id();
         this.title = entity.getTitle();
         this.writer = entity.getWriter();
@@ -33,13 +34,13 @@ public class ChallengeDetailResponseDto {
         this.category = entity.getCategory();
         this.explain = entity.getExplain();
         this.missions = convertMissionDto(entity.getMissions());
-        this.filePath = pictureService.getPictureUrl(entity);
+        this.picture = filePath + entity.getPicture().getNewName();
         this.participantsNumber = entity.getParticipants().size();
         this.progressPercent = calculateProgress();
     }
 
     private List<MissionResponseDto> convertMissionDto(List<Mission> missions) {
-        return missions.stream().map(mission -> new MissionResponseDto(mission.getMissionDate(), mission.getMission()))
+        return missions.stream().map(MissionResponseDto::new)
                 .collect(Collectors.toList());
     }
 

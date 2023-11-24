@@ -1,7 +1,6 @@
 package com.likelion.songyeechallenge.web.dto;
 
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
-import com.likelion.songyeechallenge.service.PictureService;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -9,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 @Getter
 public class ChallengeListResponseDto {
+    private static String filePath = "./src/main/resources/static/images/";
     private Long challenge_id;
     private String title;
     private String category;
@@ -16,9 +16,9 @@ public class ChallengeListResponseDto {
     private String endDate;
     private String explain;
     private double progressPercent;
-    private String filePath;
+    private String picture;
 
-    public ChallengeListResponseDto(Challenge entity, PictureService pictureService) {
+    public ChallengeListResponseDto(Challenge entity) {
         this.challenge_id = entity.getChallenge_id();
         this.title = entity.getTitle();
         this.category = entity.getCategory();
@@ -26,7 +26,7 @@ public class ChallengeListResponseDto {
         this.endDate = entity.getEndDate();
         this.explain = entity.getExplain();
         this.progressPercent = calculateProgress();
-        this.filePath = pictureService.getPictureUrl(entity);
+        this.picture = filePath + entity.getPicture().getNewName();
     }
 
     private double calculateProgress() {

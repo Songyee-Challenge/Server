@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 public class MyMissionResponseDto {
 
     private static String filePath = "./src/main/resources/static/images/";
-
     private Long challenge_id;
     private String title;
     private String explain;
@@ -30,7 +29,7 @@ public class MyMissionResponseDto {
     }
 
     private List<MissionResponseDto> convertMissionDto(List<Mission> missions) {
-        return missions.stream().map(mission -> new MissionResponseDto(mission.getMissionDate(), mission.getMission()))
+        return missions.stream().map(MissionResponseDto::new)
                 .collect(Collectors.toList());
     }
 }

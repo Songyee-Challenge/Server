@@ -1,16 +1,16 @@
 package com.likelion.songyeechallenge.web.dto;
 
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
-import com.likelion.songyeechallenge.service.PictureService;
 import lombok.Getter;
 
 @Getter
 public class MainPageResponseDto {
+    private static String filePath = "./src/main/resources/static/images/";
     private Long challenge_id;
-    private String filePath;
+    private String picture;
 
-    public MainPageResponseDto(Challenge entity, PictureService pictureService) {
+    public MainPageResponseDto(Challenge entity) {
         this.challenge_id = entity.getChallenge_id();
-        this.filePath = pictureService.getPictureUrl(entity);
+        this.picture = filePath + entity.getPicture().getNewName();
     }
 }

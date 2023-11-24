@@ -1,7 +1,5 @@
 package com.likelion.songyeechallenge.web.dto;
 
-import com.likelion.songyeechallenge.domain.picture.Picture;
-import com.likelion.songyeechallenge.service.PictureService;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

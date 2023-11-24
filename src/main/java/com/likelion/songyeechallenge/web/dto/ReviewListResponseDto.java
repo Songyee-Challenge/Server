@@ -3,7 +3,6 @@ package com.likelion.songyeechallenge.web.dto;
 import com.likelion.songyeechallenge.domain.review.Review;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Getter

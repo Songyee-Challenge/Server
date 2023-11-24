@@ -23,7 +23,7 @@ public class ChallengeController {
                               @RequestParam("picture") MultipartFile file,
                               @RequestHeader("Authorization") String authorizationHeader) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
-        com.likelion.songyeechallenge.domain.challenge.Challenge challenge = challengeService.postChallenge(saveRequestDto, file, jwtToken);
+        Challenge challenge = challengeService.postChallenge(saveRequestDto, file, jwtToken);
         return challenge.getChallenge_id();
     }
 

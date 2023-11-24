@@ -45,4 +45,8 @@ public class Mission {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public void setComplete(boolean complete) {
+        isComplete = complete;
+    }
 }
