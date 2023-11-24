@@ -96,11 +96,10 @@ public class MyPageController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to update review: " + e.getMessage());
         }
-
+    }
     @PostMapping("/mission/{missionId}/{challengeId}")
     public boolean isCompleteMission(@PathVariable("missionId") Long missionId, @PathVariable("challengeId") Long challengeId, @RequestHeader("Authorization") String authorizationHeader) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         return myPageService.isCompleteMission(missionId, challengeId, jwtToken);
-
     }
 }
