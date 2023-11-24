@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 
 @Getter
 public class ReviewListResponseDto {
+
+    private Long review_id;
     private String title;
     private String myChallenge;
     private String content;
@@ -15,6 +17,7 @@ public class ReviewListResponseDto {
     private int likeCount;
 
     public ReviewListResponseDto(Review entity) {
+        this.review_id = entity.getReview_id();
         this.title = entity.getTitle();
         this.myChallenge = entity.getMyChallenge();
         this.content = entity.getContent();
