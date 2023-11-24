@@ -31,7 +31,8 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                         try {
                             authz
                                     .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                                    .antMatchers("/home/**", "/api/v1/user/**", "/h2-console/**", "/images/**", "/api/v1/picture/**").permitAll()
+                                    .antMatchers("/home/**", "/api/v1/user/**", "/h2-console/**", "/api/v1/signup/**").permitAll()
+                                    .antMatchers("/api/v1/mypage/**").hasAnyRole("USER", "ADMIN")
                                     .anyRequest().authenticated()
                             .and()
                                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
