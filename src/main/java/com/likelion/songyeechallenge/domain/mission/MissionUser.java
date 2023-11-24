@@ -1,6 +1,7 @@
 //package com.likelion.songyeechallenge.domain.mission;
 //
 //import com.likelion.songyeechallenge.domain.user.User;
+//import lombok.Builder;
 //import lombok.Getter;
 //import lombok.NoArgsConstructor;
 //
@@ -24,4 +25,11 @@
 //    private User user;
 //
 //    private boolean isComplete;
+//
+//    @Builder
+//    public MissionUser(Mission mission, User user, boolean isComplete) {
+//        this.mission = mission;
+//        this.user = user;
+//        this.isComplete = isComplete;
+//    }
 //}

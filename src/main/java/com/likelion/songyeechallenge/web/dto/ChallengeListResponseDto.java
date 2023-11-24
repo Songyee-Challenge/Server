@@ -8,10 +8,8 @@ import java.time.format.DateTimeFormatter;
 
 @Getter
 public class ChallengeListResponseDto {
-    private static String filePath = "./src/main/resources/static/images/";
     private Long challenge_id;
-    private String title;
-    private String category;
+    private String challenge_title;
     private String startDate;
     private String endDate;
     private String explain;
@@ -20,13 +18,12 @@ public class ChallengeListResponseDto {
 
     public ChallengeListResponseDto(Challenge entity) {
         this.challenge_id = entity.getChallenge_id();
-        this.title = entity.getTitle();
-        this.category = entity.getCategory();
+        this.challenge_title = entity.getTitle() + " (" + entity.getCategory() + ")";
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
         this.explain = entity.getExplain();
         this.progressPercent = calculateProgress();
-        this.picture = filePath + entity.getPicture().getNewName();
+        this.picture = entity.getPicture().getNewName();
     }
 
     private double calculateProgress() {

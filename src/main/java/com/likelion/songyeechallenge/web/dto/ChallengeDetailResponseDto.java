@@ -12,13 +12,11 @@ import java.util.stream.Collectors;
 
 @Getter
 public class ChallengeDetailResponseDto {
-    private static String filePath = "./src/main/resources/static/images/";
     private Long challenge_id;
-    private String title;
+    private String challenge_title;
     private String writer;
     private String startDate;
     private String endDate;
-    private String category;
     private String explain;
     private List<MissionResponseDto> missions;
     private String picture;
@@ -27,14 +25,13 @@ public class ChallengeDetailResponseDto {
 
     public ChallengeDetailResponseDto(Challenge entity) {
         this.challenge_id = entity.getChallenge_id();
-        this.title = entity.getTitle();
+        this.challenge_title = entity.getTitle() + " (" + entity.getCategory() + ")";
         this.writer = entity.getWriter();
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
-        this.category = entity.getCategory();
         this.explain = entity.getExplain();
         this.missions = convertMissionDto(entity.getMissions());
-        this.picture = filePath + entity.getPicture().getNewName();
+        this.picture = entity.getPicture().getNewName();
         this.participantsNumber = entity.getParticipants().size();
         this.progressPercent = calculateProgress();
     }

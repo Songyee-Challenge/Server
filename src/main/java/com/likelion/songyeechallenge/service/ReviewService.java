@@ -22,6 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -32,6 +34,10 @@ import java.util.stream.Collectors;
 @Service
 public class ReviewService {
 
+    private LocalDate today = LocalDate.now();
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+    private String formattedToday = today.format(formatter);
+
     private final ChallengeRepository challengeRepository;
     private final ReviewRepository reviewRepository;
     private final LikeRepository likeRepository;
@@ -41,7 +47,7 @@ public class ReviewService {
     @Transactional
     public List<ReviewChallengeDto> findMyChallenge(String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
+        Set<Challenge> participatedChallenges = challengeRepository.findByMyChallengeAfterStart(userId, formattedToday);
 
         return participatedChallenges.stream()
                 .map(ReviewChallengeDto::new)

@@ -1,6 +1,6 @@
 package com.likelion.songyeechallenge.controller;
 
-import com.likelion.songyeechallenge.VO.MailVo;
+import com.likelion.songyeechallenge.config.vo.MailVo;
 import com.likelion.songyeechallenge.service.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

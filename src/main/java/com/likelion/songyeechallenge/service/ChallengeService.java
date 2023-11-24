@@ -29,7 +29,7 @@ public class ChallengeService {
 
     private LocalDate today = LocalDate.now();
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-    String formattedToday = today.format(formatter);
+    private String formattedToday = today.format(formatter);
 
     private final ChallengeRepository challengeRepository;
     private final UserRepository userRepository;
