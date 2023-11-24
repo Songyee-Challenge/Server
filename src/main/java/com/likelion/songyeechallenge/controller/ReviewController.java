@@ -6,6 +6,8 @@ import com.likelion.songyeechallenge.web.dto.ReviewChallengeDto;
 import com.likelion.songyeechallenge.web.dto.ReviewListResponseDto;
 import com.likelion.songyeechallenge.web.dto.ReviewSaveRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,4 +42,6 @@ public class ReviewController {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         return reviewService.pressLike(id, jwtToken);
     }
+
+
 }

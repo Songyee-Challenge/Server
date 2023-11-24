@@ -14,13 +14,14 @@ public class MailService {
     private final JavaMailSender javaMailSender;
     private static final String senderEmail= "gohwangbong@gmail.com";
     private static int number;
-
+    private int savedVerificationCode;
     public static void createNumber(){
         number = (int)(Math.random() * (90000)) + 100000;// (int) Math.random() * (최댓값-최소값+1) + 최소값
     }
 
     public MimeMessage CreateMail(String mail){
         createNumber();
+        savedVerificationCode = number;
         MimeMessage message = javaMailSender.createMimeMessage();
 
         try {
@@ -46,5 +47,9 @@ public class MailService {
         javaMailSender.send(message);
 
         return number;
+    }
+
+    public int getSavedVerificationCode() {
+        return savedVerificationCode;
     }
 }

@@ -78,4 +78,13 @@ public class Review extends BaseTimeEntity {
     private void decreaseLikeCount() {
         this.likeCount = Math.max(0, this.likeCount - 1);
     }
+
+    public boolean isCreatedByUser(Long userId) {
+        return this.user != null && this.user.getUserId().equals(userId);
+    }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

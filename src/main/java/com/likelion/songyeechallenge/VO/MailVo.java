@@ -9,6 +9,9 @@ public class MailVo {
     private String title;
     private String content;
 
+    // 인증번호 재확인
+    private int verificationCode;
+
     public String getEmail() {
         return email;
     }
