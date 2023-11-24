@@ -1,4 +1,4 @@
-package com.likelion.songyeechallenge.VO;
+package com.likelion.songyeechallenge.config.vo;
 
 import lombok.Data;
 
