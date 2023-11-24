@@ -52,14 +52,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<Mission> missions = new ArrayList<>();
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Auth auth;
-
-//    @OneToMany(mappedBy = "user")
-//    private List<MissionUser> missionUsers = new ArrayList<>();
 
     @Builder
     public User(Long user_id, String email, String password, String name, String major, Long student_id, Role role) {
@@ -78,9 +72,5 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public Long getUserId() {
-        return user_id;
     }
 }

@@ -84,7 +84,7 @@ public class Review extends BaseTimeEntity {
     }
 
     public boolean isCreatedByUser(Long userId) {
-        return this.user != null && this.user.getUserId().equals(userId);
+        return this.user != null && this.user.getUser_id().equals(userId);
     }
 
     public void update(String title, String content) {

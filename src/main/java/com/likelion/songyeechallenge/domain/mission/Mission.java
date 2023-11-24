@@ -22,15 +22,9 @@ public class Mission {
     @Column(nullable = false)
     private String mission;
 
-    private boolean isComplete;
-
     @ManyToOne
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @Builder
     public Mission(String missionDate, String mission) {
@@ -40,13 +34,5 @@ public class Mission {
 
     public void setChallenge(Challenge challenge) {
         this.challenge = challenge;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setComplete(boolean complete) {
-        isComplete = complete;
     }
 }

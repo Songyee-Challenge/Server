@@ -5,6 +5,8 @@ import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
 import com.likelion.songyeechallenge.domain.mission.Mission;
 import com.likelion.songyeechallenge.domain.mission.MissionRepository;
+import com.likelion.songyeechallenge.domain.missionUser.MissionUser;
+import com.likelion.songyeechallenge.domain.missionUser.MissionUserRepository;
 import com.likelion.songyeechallenge.domain.review.Review;
 import com.likelion.songyeechallenge.domain.review.ReviewRepository;
 import com.likelion.songyeechallenge.domain.user.User;
@@ -37,7 +39,9 @@ public class MyPageService {
     private final ChallengeRepository challengeRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final ReviewRepository reviewRepository;
+    private final MissionUserRepository missionUserRepository;
     private final MissionRepository missionRepository;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findMyRecruiting(String jwtToken) {
@@ -123,14 +127,11 @@ public class MyPageService {
     }
 
     @Transactional
-    public boolean isCompleteMission(Long missionId, Long challengeId, String jwtToken) {
+    public boolean isCompleteMission(Long missionId, String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-
-        Mission mission = missionRepository.findMyMissionCompleteness(userId, missionId, challengeId);
-        mission.setComplete(!mission.isComplete());
-        missionRepository.save(mission);
-        return mission.isComplete();
+        MissionUser missionUser = missionUserRepository.findMyMission(userId, missionId);
+        missionUser.setComplete(!missionUser.isComplete());
+        missionUserRepository.save(missionUser);
+        return missionUser.isComplete();
     }
-
-
 }
