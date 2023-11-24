@@ -32,9 +32,7 @@ public class MyPageService {
     String formattedToday = today.format(formatter);
 
     private final ChallengeRepository challengeRepository;
-    private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final PictureService pictureService;
     private final ReviewRepository reviewRepository;
     private final MissionRepository missionRepository;
 
