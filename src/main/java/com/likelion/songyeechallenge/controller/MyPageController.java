@@ -8,6 +8,7 @@ import com.likelion.songyeechallenge.service.MyPageService;
 import com.likelion.songyeechallenge.service.ReviewService;
 import com.likelion.songyeechallenge.web.dto.*;
 import com.likelion.songyeechallenge.service.UserService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +24,13 @@ import java.util.stream.Collectors;
 public class MyPageController {
 
     private final MyPageService myPageService;
-    private final UserService userService;
     private final ReviewService reviewService;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final UserRepository userRepository;
+
+    @GetMapping("/name")
+    public String getMyName(@RequestHeader("Authorization") String authorizationHeader) {
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        return myPageService.findMyName(jwtToken);
+    }
 
     @GetMapping("/challenge/recruiting")
     public List<ChallengeListResponseDto> getMyRecruiting(@RequestHeader("Authorization") String authorizationHeader) {
