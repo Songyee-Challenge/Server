@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 @Getter
 public class MyMissionResponseDto {
 
-    private static String filePath = "./src/main/resources/static/images/";
+    private static String filePath = "src/main/resources/static/images/";
     private Long challenge_id;
     private String title;
     private String explain;

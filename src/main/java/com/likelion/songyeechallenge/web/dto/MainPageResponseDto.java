@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class MainPageResponseDto {
-    private static String filePath = "./src/main/resources/static/images/";
+    private static String filePath = "src/main/resources/static/images/";
     private Long challenge_id;
     private String picture;
 
