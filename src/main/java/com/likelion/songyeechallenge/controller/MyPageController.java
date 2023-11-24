@@ -97,6 +97,7 @@ public class MyPageController {
                     .body("Failed to update review: " + e.getMessage());
         }
     }
+
     @PostMapping("/mission/{missionId}/{challengeId}")
     public boolean isCompleteMission(@PathVariable("missionId") Long missionId, @PathVariable("challengeId") Long challengeId, @RequestHeader("Authorization") String authorizationHeader) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
