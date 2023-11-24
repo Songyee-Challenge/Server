@@ -1,19 +1,21 @@
 package com.likelion.songyeechallenge.controller;
 
+import com.likelion.songyeechallenge.config.JwtTokenProvider;
+import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.user.User;
+import com.likelion.songyeechallenge.domain.user.UserRepository;
 import com.likelion.songyeechallenge.service.MyPageService;
 import com.likelion.songyeechallenge.service.ReviewService;
-import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
-import com.likelion.songyeechallenge.web.dto.MyMissionResponseDto;
-import com.likelion.songyeechallenge.web.dto.MyReviewResponseDto;
+import com.likelion.songyeechallenge.web.dto.*;
 import com.likelion.songyeechallenge.service.UserService;
-import com.likelion.songyeechallenge.web.dto.ReviewUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/mypage")
@@ -23,6 +25,8 @@ public class MyPageController {
     private final MyPageService myPageService;
     private final UserService userService;
     private final ReviewService reviewService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
 
     @GetMapping("/challenge/recruiting")
     public List<ChallengeListResponseDto> getMyRecruiting(@RequestHeader("Authorization") String authorizationHeader) {
@@ -54,20 +58,22 @@ public class MyPageController {
         return myPageService.findMyChallengeAndMission(jwtToken);
     }
 
-    @GetMapping("/info/{userId}")
-    public ResponseEntity<User> getUserProfile(@PathVariable Long userId) {
-        User userProfile = userService.getUserProfile(userId);
-        return new ResponseEntity<>(userProfile, HttpStatus.OK);
+    @GetMapping("/info")
+    public List<UserInfoDto> getUserInfo(@RequestHeader("Authorization") String authorizationHeader) {
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        return myPageService.showMyInfo(jwtToken);
     }
 
-    @DeleteMapping("/delete-user/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+
+    @DeleteMapping("/delete-user")
+    public ResponseEntity<String> deleteUser(@RequestHeader("Authorization") String authorizationHeader){
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
         try {
-            userService.deleteUser(userId);
-            return ResponseEntity.ok("User deleted successfully.");
+            myPageService.deleteAccount(jwtToken);
+            return ResponseEntity.ok("User account deleted successfully.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to delete user: " + e.getMessage());
+            // 실패한 경우 예외를 캐치하여 실패 응답을 반환
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete user account.");
         }
     }
 
