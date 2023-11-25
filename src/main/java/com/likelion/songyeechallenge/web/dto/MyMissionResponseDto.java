@@ -32,5 +32,12 @@ public class MyMissionResponseDto {
                 .map(mission -> new MyMissionCompleteDto(mission, userMissions))
                 .collect(Collectors.toList());
         this.missionCount = entity.getMissions().size();
+        this.completedCount = calcualteCompletedMission(userMissions);
+    }
+
+    private int calcualteCompletedMission(List<UserMission> userMissions) {
+        return (int) userMissions.stream()
+                .filter(UserMission::isComplete)
+                .count();
     }
 }
