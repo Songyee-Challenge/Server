@@ -43,6 +43,13 @@ public class MyPageService {
     private final MissionRepository missionRepository;
     private final UserRepository userRepository;
 
+    @Transactional
+    public String findMyName(String jwtToken) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        User user = userRepository.findByUser_id(userId);
+        return user.getName();
+    }
+
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findMyRecruiting(String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
