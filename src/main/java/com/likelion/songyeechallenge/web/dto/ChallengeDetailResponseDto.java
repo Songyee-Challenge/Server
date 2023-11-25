@@ -2,7 +2,6 @@ package com.likelion.songyeechallenge.web.dto;
 
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.mission.Mission;
-import com.likelion.songyeechallenge.service.PictureService;
 import lombok.Getter;
 
 import java.time.LocalDate;

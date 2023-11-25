@@ -1,7 +1,6 @@
 package com.likelion.songyeechallenge.domain.mission;
 
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
-import com.likelion.songyeechallenge.domain.user.User;
 import com.likelion.songyeechallenge.domain.userMission.UserMission;
 import lombok.Builder;
 import lombok.Getter;

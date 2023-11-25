@@ -2,9 +2,7 @@ package com.likelion.songyeechallenge.domain.user;
 
 import com.likelion.songyeechallenge.domain.auth.Auth;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
-import com.likelion.songyeechallenge.domain.likes.Like;
-import com.likelion.songyeechallenge.domain.mission.Mission;
-//import com.likelion.songyeechallenge.domain.mission.UserMission;
+import com.likelion.songyeechallenge.domain.like.Like;
 import com.likelion.songyeechallenge.domain.review.Review;
 import com.likelion.songyeechallenge.domain.userMission.UserMission;
 import lombok.Builder;
