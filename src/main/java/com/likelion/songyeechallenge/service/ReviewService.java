@@ -94,39 +94,18 @@ public class ReviewService {
         }
     }
 
-    public void deleteReview(Long reviewId) {
-        reviewRepository.deleteById(reviewId);
-    }
-
-    @Transactional(readOnly = true)
-    public boolean isReviewCreatedByUser(Long reviewId, String jwtToken) {
-        Long userIdFromToken = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        Optional<Review> optionalReview = reviewRepository.findById(reviewId);
-
-        return optionalReview.map(review -> review.getUser().getUser_id().equals(userIdFromToken)).orElse(false);
+    public Long deleteReview(Long reviewId, String jwtToken) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        Review review = reviewRepository.findByReviewIdAndUserId(reviewId, userId);
+        reviewRepository.deleteById(review.getReview_id());
+        return review.getReview_id();
     }
 
     @Transactional
-    public Review updateReview(Long reviewId, ReviewUpdateRequestDto requestDto) {
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다. id=" + reviewId));
-
-        // 리뷰를 작성한 사용자와 현재 로그인한 사용자가 일치하는지 확인
-        if (!review.isCreatedByUser(jwtTokenProvider.getUserIdFromToken(requestDto.getToken()))) {
-            throw new UnauthorizedException("리뷰를 수정할 권한이 없습니다.");
-        }
-
-        // 수정할 내용 업데이트
+    public Long updateReview(Long reviewId, ReviewUpdateRequestDto requestDto, String jwtToken) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        Review review = reviewRepository.findByReviewIdAndUserId(reviewId, userId);
         review.update(requestDto.getTitle(), requestDto.getContent());
-
-        return review;
-
-    }
-
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public class UnauthorizedException extends RuntimeException {
-        public UnauthorizedException(String message) {
-            super(message);
-        }
+        return reviewId;
     }
 }
