@@ -19,6 +19,11 @@ public class MyMissionCompleteDto {
         this.mission_id = mission.getMission_id();
         this.missionDate = mission.getMissionDate();
         this.mission = mission.getMission();
-        this.isComplete = userMissions.stream().allMatch(UserMission::isComplete);
+
+        Optional<UserMission> userMission = userMissions.stream()
+                .filter(um -> um.getMission().equals(mission))
+                .findFirst();
+
+        this.isComplete = userMission.map(UserMission::isComplete).orElse(false);
     }
 }
