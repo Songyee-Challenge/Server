@@ -68,9 +68,16 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public List<ReviewListResponseDto> findAllReview() {
+    public List<ReviewListResponseDto> findAllReview(String jwtToken) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        User user = userRepository.findByUser_id(userId);
+        List<Long> likedReviewIdList = user.getLikes().stream()
+                .map(Like::getReview)
+                .map(Review::getReview_id)
+                .collect(Collectors.toList());
+
         return reviewRepository.findAllDesc().stream()
-                .map(ReviewListResponseDto::new)
+                .map(review -> new ReviewListResponseDto(review, likedReviewIdList.contains(review.getReview_id())))
                 .collect(Collectors.toList());
     }
 

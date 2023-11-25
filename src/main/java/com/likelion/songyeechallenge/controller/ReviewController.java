@@ -31,8 +31,9 @@ public class ReviewController {
     }
 
     @GetMapping("/all")
-    public List<ReviewListResponseDto> getAllReview() {
-        return reviewService.findAllReview();
+    public List<ReviewListResponseDto> getAllReview(@RequestHeader("Authorization") String authorizationHeader) {
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        return reviewService.findAllReview(jwtToken);
     }
 
     @PostMapping("/{id}/like")
