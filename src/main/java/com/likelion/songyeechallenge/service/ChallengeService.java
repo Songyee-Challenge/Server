@@ -22,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -66,23 +68,17 @@ public class ChallengeService {
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findRecruitingPost() {
-        return challengeRepository.findBeforeStartDesc(formattedToday).stream()
-                .map(ChallengeListResponseDto::new)
-                .collect(Collectors.toList());
+        return findChallengesByStatus(() -> challengeRepository.findBeforeStartDesc(formattedToday));
     }
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findInProcessPost() {
-        return challengeRepository.findInProcessDesc(formattedToday).stream()
-                .map(ChallengeListResponseDto::new)
-                .collect(Collectors.toList());
+        return findChallengesByStatus(() -> challengeRepository.findInProcessDesc(formattedToday));
     }
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findFinishedPost() {
-        return challengeRepository.findFinishedDesc(formattedToday).stream()
-                .map(ChallengeListResponseDto::new)
-                .collect(Collectors.toList());
+        return findChallengesByStatus(() -> challengeRepository.findFinishedDesc(formattedToday));
     }
 
     public ChallengeDetailResponseDto findById(Long challenge_id) {
@@ -120,5 +116,11 @@ public class ChallengeService {
         }
 
         return participant.getUser_id();
+    }
+
+    private List<ChallengeListResponseDto> findChallengesByStatus(Supplier<List<Challenge>> challengeList) {
+        return challengeList.get().stream()
+                .map(ChallengeListResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
