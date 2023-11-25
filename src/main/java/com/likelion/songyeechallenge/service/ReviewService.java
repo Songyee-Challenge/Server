@@ -3,8 +3,8 @@ package com.likelion.songyeechallenge.service;
 import com.likelion.songyeechallenge.config.JwtTokenProvider;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
-import com.likelion.songyeechallenge.domain.likes.Like;
-import com.likelion.songyeechallenge.domain.likes.LikeRepository;
+import com.likelion.songyeechallenge.domain.like.Like;
+import com.likelion.songyeechallenge.domain.like.LikeRepository;
 import com.likelion.songyeechallenge.domain.review.Review;
 import com.likelion.songyeechallenge.domain.review.ReviewRepository;
 import com.likelion.songyeechallenge.domain.user.User;
@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
