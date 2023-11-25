@@ -38,6 +38,7 @@ public class MyPageService {
     private final JwtTokenProvider jwtTokenProvider;
     private final ReviewRepository reviewRepository;
     private final MissionRepository missionRepository;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findMyRecruiting(String jwtToken) {

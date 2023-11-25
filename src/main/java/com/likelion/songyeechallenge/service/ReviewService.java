@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -96,8 +97,18 @@ public class ReviewService {
     }
 
     public void deleteReview(Long reviewId) {
-        reviewRepository.deleteById(reviewId);
-    }
+            // 리뷰 ID를 기반으로 해당 리뷰를 찾아옴
+        Optional<Review> optionalReview = reviewRepository.findById(reviewId);
+
+            // 리뷰가 존재하는지 확인 후 삭제
+        if (optionalReview.isPresent()) {
+            Review review = optionalReview.get();
+            reviewRepository.delete(review);
+        } else {
+                // 리뷰가 존재하지 않을 경우 예외 처리
+            throw new EntityNotFoundException("Review not found with ID: " + reviewId);
+            }
+        }
 
     @Transactional(readOnly = true)
     public boolean isReviewCreatedByUser(Long reviewId, String jwtToken) {
