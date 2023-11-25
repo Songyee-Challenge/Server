@@ -7,11 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReviewUpdateRequestDto {
 
-    private String title;
     private String content;
 
-    public ReviewUpdateRequestDto(String title, String content) {
-        this.title = title;
+    public ReviewUpdateRequestDto(String content) {
         this.content = content;
     }
 }
