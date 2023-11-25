@@ -59,6 +59,10 @@ public class Review extends BaseTimeEntity {
         this.user = user;
     }
 
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
+    }
+
     public void addLike(Like like) {
         likes.add(like);
         like.setReview(this);
