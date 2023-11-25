@@ -1,14 +1,10 @@
 package com.likelion.songyeechallenge.web.dto;
 
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
-import com.likelion.songyeechallenge.domain.mission.Mission;
 import com.likelion.songyeechallenge.domain.userMission.UserMission;
 import lombok.Getter;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter

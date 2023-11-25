@@ -1,6 +1,5 @@
 package com.likelion.songyeechallenge.service;
 
-import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.picture.Picture;
 import com.likelion.songyeechallenge.domain.picture.PictureRepository;
 import lombok.RequiredArgsConstructor;
@@ -61,10 +60,5 @@ public class PictureService {
         String ext = filename.substring(idx);
 
         return ext;
-    }
-
-    public String getPictureUrl(Challenge challenge) {
-        Picture picture = challenge.getPicture();
-        return uploadDir + "/" + picture.getNewName();
     }
 }

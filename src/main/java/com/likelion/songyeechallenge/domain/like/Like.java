@@ -1,4 +1,4 @@
-package com.likelion.songyeechallenge.domain.likes;
+package com.likelion.songyeechallenge.domain.like;
 
 import com.likelion.songyeechallenge.domain.review.Review;
 import com.likelion.songyeechallenge.domain.user.User;

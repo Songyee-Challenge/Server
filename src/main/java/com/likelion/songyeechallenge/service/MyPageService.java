@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -52,36 +53,17 @@ public class MyPageService {
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findMyRecruiting(String jwtToken) {
-        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
-
-        return challengeRepository.findBeforeStartDesc(formattedToday).stream()
-                .filter(participatedChallenges::contains)
-                .map(ChallengeListResponseDto::new)
-                .collect(Collectors.toList());
+        return findChallengesByStatus(jwtToken, today -> challengeRepository.findBeforeStartDesc(formattedToday));
     }
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findMyInProcess(String jwtToken) {
-        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
-
-        return challengeRepository.findInProcessDesc(formattedToday).stream()
-                .filter(participatedChallenges::contains)
-                .map(ChallengeListResponseDto::new)
-                .collect(Collectors.toList());
+        return findChallengesByStatus(jwtToken, today -> challengeRepository.findInProcessDesc(formattedToday));
     }
-
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findMyFinished(String jwtToken) {
-        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
-
-        return challengeRepository.findFinishedDesc(formattedToday).stream()
-                .filter(participatedChallenges::contains)
-                .map(ChallengeListResponseDto::new)
-                .collect(Collectors.toList());
+        return findChallengesByStatus(jwtToken, today -> challengeRepository.findFinishedDesc(formattedToday));
     }
 
     @Transactional(readOnly = true)
@@ -112,20 +94,11 @@ public class MyPageService {
     }
 
     @Transactional
-    public List<UserInfoDto> showMyInfo(String jwtToken) {
+    public UserInfoDto findMyInfo(String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-
-        // 단일 사용자를 조회하는 대신, Set 대신 User 객체 하나를 반환하는 메서드를 사용
-        User userInformation = userRepository.findByUser_id(userId);
-
-        // 리스트에 추가
-        List<User> userList = new ArrayList<>();
-        userList.add(userInformation);
-
-        // UserInfoDto로 매핑하여 반환
-        return userList.stream()
-                .map(UserInfoDto::new)
-                .collect(Collectors.toList());
+        User user = userRepository.findByUser_id(userId);
+        UserInfoDto userInfoDto = convertToUserInfoDto(user);
+        return userInfoDto;
     }
 
     @Transactional
@@ -147,5 +120,25 @@ public class MyPageService {
         userMission.setComplete(!userMission.isComplete());
         userMissionRepository.save(userMission);
         return userMission.isComplete();
+    }
+
+    private List<ChallengeListResponseDto> findChallengesByStatus(String jwtToken, Function<Long, List<Challenge>> challengeFinder) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
+
+        return challengeFinder.apply(userId).stream()
+                .filter(participatedChallenges::contains)
+                .map(ChallengeListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    private UserInfoDto convertToUserInfoDto(User user) {
+        UserInfoDto userInfoDto = new UserInfoDto();
+        userInfoDto.setUser_id(user.getUser_id());
+        userInfoDto.setName(user.getName());
+        userInfoDto.setEmail(user.getEmail());
+        userInfoDto.setMajor(user.getMajor());
+        userInfoDto.setStudent_id(user.getStudent_id());
+        return userInfoDto;
     }
 }

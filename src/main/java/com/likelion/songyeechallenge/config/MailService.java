@@ -1,4 +1,4 @@
-package com.likelion.songyeechallenge.service;
+package com.likelion.songyeechallenge.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;

@@ -1,22 +1,14 @@
 package com.likelion.songyeechallenge.controller;
 
-import com.likelion.songyeechallenge.config.JwtTokenProvider;
-import com.likelion.songyeechallenge.domain.challenge.Challenge;
-import com.likelion.songyeechallenge.domain.user.User;
-import com.likelion.songyeechallenge.domain.user.UserRepository;
 import com.likelion.songyeechallenge.service.MyPageService;
 import com.likelion.songyeechallenge.service.ReviewService;
 import com.likelion.songyeechallenge.web.dto.*;
-import com.likelion.songyeechallenge.service.UserService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/mypage")
@@ -56,16 +48,34 @@ public class MyPageController {
         return myPageService.findMyReview(jwtToken);
     }
 
+    @DeleteMapping("/review/delete/{id}")
+    public Long deleteReview(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        return reviewService.deleteReview(id, jwtToken);
+    }
+
+    @PutMapping("/review/edit/{id}")
+    public Long updateReview(@PathVariable Long id, @RequestBody ReviewUpdateRequestDto requestDto, @RequestHeader("Authorization") String authorizationHeader) {
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        return reviewService.updateReview(id, requestDto, jwtToken);
+    }
+
     @GetMapping("/mission")
     public List<MyMissionResponseDto> getUserMissions(@RequestHeader("Authorization") String authorizationHeader) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         return myPageService.findMyChallengeAndMission(jwtToken);
     }
 
-    @GetMapping("/info")
-    public List<UserInfoDto> getUserInfo(@RequestHeader("Authorization") String authorizationHeader) {
+    @PostMapping("/mission/{missionId}/{challengeId}")
+    public boolean isCompleteMission(@PathVariable("missionId") Long missionId, @RequestHeader("Authorization") String authorizationHeader) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
-        return myPageService.showMyInfo(jwtToken);
+        return myPageService.isCompleteMission(missionId, jwtToken);
+    }
+
+    @GetMapping("/info")
+    public UserInfoDto getUserInfo(@RequestHeader("Authorization") String authorizationHeader) {
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        return myPageService.findMyInfo(jwtToken);
     }
 
 
@@ -79,38 +89,5 @@ public class MyPageController {
             // 실패한 경우 예외를 캐치하여 실패 응답을 반환
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete user account.");
         }
-    }
-
-    @DeleteMapping("/review/delete/{id}")
-    public ResponseEntity<String> deleteReview(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
-        String jwtToken = authorizationHeader.replace("Bearer ", "");
-
-        if (reviewService.isReviewCreatedByUser(id, jwtToken)) {
-            reviewService.deleteReview(id);
-            return ResponseEntity.ok("Review deleted successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You do not have permission to delete this review.");
-        }
-    }
-
-    @PutMapping("/review/edit/{id}")
-    public ResponseEntity<String> updateReview(@PathVariable Long id, @RequestBody ReviewUpdateRequestDto requestDto) {
-        try {
-            reviewService.updateReview(id, requestDto);
-            return ResponseEntity.ok("Review updated successfully.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (ReviewService.UnauthorizedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update review: " + e.getMessage());
-        }
-    }
-
-    @PostMapping("/mission/{missionId}/{challengeId}")
-    public boolean isCompleteMission(@PathVariable("missionId") Long missionId, @RequestHeader("Authorization") String authorizationHeader) {
-        String jwtToken = authorizationHeader.replace("Bearer ", "");
-        return myPageService.isCompleteMission(missionId, jwtToken);
     }
 }

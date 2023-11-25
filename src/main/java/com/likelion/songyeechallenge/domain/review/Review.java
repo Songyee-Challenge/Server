@@ -2,8 +2,7 @@ package com.likelion.songyeechallenge.domain.review;
 
 import com.likelion.songyeechallenge.domain.BaseTimeEntity;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
-import com.likelion.songyeechallenge.domain.likes.Like;
-//import com.likelion.songyeechallenge.domain.mission.UserMission;
+import com.likelion.songyeechallenge.domain.like.Like;
 import com.likelion.songyeechallenge.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,9 +41,6 @@ public class Review extends BaseTimeEntity {
 
     @ManyToOne
     private User user;
-//
-//    @OneToMany(mappedBy = "review")
-//    private List<UserMission> missionUsers = new ArrayList<>();
 
     @Builder
     public Review(String title, String myChallenge, String content, String writer) {
@@ -83,12 +79,7 @@ public class Review extends BaseTimeEntity {
         this.likeCount = Math.max(0, this.likeCount - 1);
     }
 
-    public boolean isCreatedByUser(Long userId) {
-        return this.user != null && this.user.getUser_id().equals(userId);
-    }
-
-    public void update(String title, String content) {
-        this.title = title;
+    public void update(String content) {
         this.content = content;
     }
 }
