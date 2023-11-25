@@ -28,20 +28,19 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .authorizeHttpRequests((authz)-> {
-                        try {
-                            authz
-                                    .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                                    .antMatchers("/home/**", "/api/v1/user/**", "/h2-console/**", "/api/v1/signup/**").permitAll()
-                                    .antMatchers("/api/v1/mypage/**").hasAnyRole("USER", "ADMIN")
-                                    .anyRequest().authenticated()
-                            .and()
-                                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                            .and()
-                                    .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
+                            try {
+                                authz
+                                        .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                                        .antMatchers("/home/**", "/api/v1/user/**", "/h2-console/**", "/api/v1/signup/**", "/images/**", "/api/v1/picture/**").permitAll()
+                                        .anyRequest().authenticated()
+                                        .and()
+                                        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                                        .and()
+                                        .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
                         }
-                    }
                 );
         return http.build();
     }
