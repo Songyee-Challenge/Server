@@ -105,7 +105,7 @@ public class ReviewService {
     public Long updateReview(Long reviewId, ReviewUpdateRequestDto requestDto, String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
         Review review = reviewRepository.findByReviewIdAndUserId(reviewId, userId);
-        review.update(requestDto.getTitle(), requestDto.getContent());
+        review.update(requestDto.getContent());
         return reviewId;
     }
 }
