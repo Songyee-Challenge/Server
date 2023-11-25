@@ -5,8 +5,8 @@ import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
 import com.likelion.songyeechallenge.domain.mission.Mission;
 import com.likelion.songyeechallenge.domain.mission.MissionRepository;
-import com.likelion.songyeechallenge.domain.missionUser.MissionUser;
-import com.likelion.songyeechallenge.domain.missionUser.MissionUserRepository;
+import com.likelion.songyeechallenge.domain.userMission.UserMission;
+import com.likelion.songyeechallenge.domain.userMission.UserMissionRepository;
 import com.likelion.songyeechallenge.domain.picture.Picture;
 import com.likelion.songyeechallenge.domain.user.User;
 import com.likelion.songyeechallenge.domain.user.UserRepository;
@@ -36,7 +36,7 @@ public class ChallengeService {
     private final ChallengeRepository challengeRepository;
     private final UserRepository userRepository;
     private final MissionRepository missionRepository;
-    private final MissionUserRepository missionUserRepository;
+    private final UserMissionRepository userMissionRepository;
     private final MissionService missionService;
     private final PictureService pictureService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -110,10 +110,10 @@ public class ChallengeService {
         List<Mission> missionsForChallenge = missionRepository.findByChallengeId(challenge.getChallenge_id());
 
         for (Mission mission : missionsForChallenge) {
-            MissionUser missionUser = new MissionUser();
-            missionUser.setUser_id(userId);
-            missionUser.setMission_id(mission.getMission_id());
-            missionUserRepository.save(missionUser);
+            UserMission userMission = new UserMission();
+            userMission.setUser(participant);
+            userMission.setMission(mission);
+            userMissionRepository.save(userMission);
 
             mission.setChallenge(challenge);
             missionRepository.save(mission);

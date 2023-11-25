@@ -2,11 +2,13 @@ package com.likelion.songyeechallenge.domain.mission;
 
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.user.User;
+import com.likelion.songyeechallenge.domain.userMission.UserMission;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -25,6 +27,9 @@ public class Mission {
     @ManyToOne
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
+
+    @OneToMany
+    private List<UserMission> userMissions;
 
     @Builder
     public Mission(String missionDate, String mission) {

@@ -4,8 +4,9 @@ import com.likelion.songyeechallenge.domain.auth.Auth;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.likes.Like;
 import com.likelion.songyeechallenge.domain.mission.Mission;
-//import com.likelion.songyeechallenge.domain.mission.MissionUser;
+//import com.likelion.songyeechallenge.domain.mission.UserMission;
 import com.likelion.songyeechallenge.domain.review.Review;
+import com.likelion.songyeechallenge.domain.userMission.UserMission;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,6 +55,9 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Auth auth;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserMission> userMissions;
 
     @Builder
     public User(Long user_id, String email, String password, String name, String major, Long student_id, Role role) {
