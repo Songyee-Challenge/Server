@@ -1,7 +1,5 @@
 package com.likelion.songyeechallenge.web.dto;
 
-// ReviewUpdateRequestDto.java
-
 import lombok.Data;
 
 @Data
