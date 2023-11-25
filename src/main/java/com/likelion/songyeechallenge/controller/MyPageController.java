@@ -109,8 +109,8 @@ public class MyPageController {
     }
 
     @PostMapping("/mission/{missionId}/{challengeId}")
-    public boolean isCompleteMission(@PathVariable("missionId") Long missionId, @PathVariable("challengeId") Long challengeId, @RequestHeader("Authorization") String authorizationHeader) {
+    public boolean isCompleteMission(@PathVariable("missionId") Long missionId, @RequestHeader("Authorization") String authorizationHeader) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
-        return myPageService.isCompleteMission(missionId, challengeId, jwtToken);
+        return myPageService.isCompleteMission(missionId, jwtToken);
     }
 }

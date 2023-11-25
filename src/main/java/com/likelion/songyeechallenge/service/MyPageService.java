@@ -5,6 +5,8 @@ import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
 import com.likelion.songyeechallenge.domain.mission.Mission;
 import com.likelion.songyeechallenge.domain.mission.MissionRepository;
+import com.likelion.songyeechallenge.domain.userMission.UserMission;
+import com.likelion.songyeechallenge.domain.userMission.UserMissionRepository;
 import com.likelion.songyeechallenge.domain.review.Review;
 import com.likelion.songyeechallenge.domain.review.ReviewRepository;
 import com.likelion.songyeechallenge.domain.user.User;
@@ -37,6 +39,7 @@ public class MyPageService {
     private final ChallengeRepository challengeRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final ReviewRepository reviewRepository;
+    private final UserMissionRepository userMissionRepository;
     private final MissionRepository missionRepository;
     private final UserRepository userRepository;
 
@@ -97,7 +100,14 @@ public class MyPageService {
         Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
 
         return participatedChallenges.stream()
-                .map(MyMissionResponseDto::new)
+                .map(challenge -> {
+                    List<Mission> missions = missionRepository.findByChallengeId(challenge.getChallenge_id());
+                    List<UserMission> userMissions = missions.stream()
+                            .map(mission -> userMissionRepository.findMyMission(userId, mission.getMission_id()))
+                            .collect(Collectors.toList());
+
+                    return new MyMissionResponseDto(challenge, userMissions);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -131,14 +141,11 @@ public class MyPageService {
     }
 
     @Transactional
-    public boolean isCompleteMission(Long missionId, Long challengeId, String jwtToken) {
+    public boolean isCompleteMission(Long missionId, String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-
-        Mission mission = missionRepository.findMyMissionCompleteness(userId, missionId, challengeId);
-        mission.setComplete(!mission.isComplete());
-        missionRepository.save(mission);
-        return mission.isComplete();
+        UserMission userMission = userMissionRepository.findMyMission(userId, missionId);
+        userMission.setComplete(!userMission.isComplete());
+        userMissionRepository.save(userMission);
+        return userMission.isComplete();
     }
-
-
 }

@@ -5,6 +5,8 @@ import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
 import com.likelion.songyeechallenge.domain.mission.Mission;
 import com.likelion.songyeechallenge.domain.mission.MissionRepository;
+import com.likelion.songyeechallenge.domain.userMission.UserMission;
+import com.likelion.songyeechallenge.domain.userMission.UserMissionRepository;
 import com.likelion.songyeechallenge.domain.picture.Picture;
 import com.likelion.songyeechallenge.domain.user.User;
 import com.likelion.songyeechallenge.domain.user.UserRepository;
@@ -34,6 +36,7 @@ public class ChallengeService {
     private final ChallengeRepository challengeRepository;
     private final UserRepository userRepository;
     private final MissionRepository missionRepository;
+    private final UserMissionRepository userMissionRepository;
     private final MissionService missionService;
     private final PictureService pictureService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -56,11 +59,7 @@ public class ChallengeService {
 
         challengeRepository.save(challenge);
 
-        List<Mission> missionsForChallenge = missionRepository.findByChallengeId(challenge.getChallenge_id());
-        for (Mission mission : missionsForChallenge) {
-            mission.setUser(author);
-            missionRepository.save(mission);
-        }
+        joinChallenge(challenge.getChallenge_id(), jwtToken);
 
         return challenge;
     }
@@ -101,7 +100,9 @@ public class ChallengeService {
 
     @Transactional
     public Long joinChallenge(Long challengeId, String jwtToken) {
-        User participant = userRepository.findByUser_id(jwtTokenProvider.getUserIdFromToken(jwtToken));
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        User participant = userRepository.findByUser_id(userId);
+
         Challenge challenge = challengeRepository.findByChallenge_id(challengeId);
         challenge.getParticipants().add(participant);
         challengeRepository.save(challenge);
@@ -109,7 +110,11 @@ public class ChallengeService {
         List<Mission> missionsForChallenge = missionRepository.findByChallengeId(challenge.getChallenge_id());
 
         for (Mission mission : missionsForChallenge) {
-            mission.setUser(participant);
+            UserMission userMission = new UserMission();
+            userMission.setUser(participant);
+            userMission.setMission(mission);
+            userMissionRepository.save(userMission);
+
             mission.setChallenge(challenge);
             missionRepository.save(mission);
         }

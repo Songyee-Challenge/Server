@@ -2,11 +2,13 @@ package com.likelion.songyeechallenge.domain.mission;
 
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.user.User;
+import com.likelion.songyeechallenge.domain.userMission.UserMission;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -22,15 +24,12 @@ public class Mission {
     @Column(nullable = false)
     private String mission;
 
-    private boolean isComplete;
-
     @ManyToOne
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @OneToMany
+    private List<UserMission> userMissions;
 
     @Builder
     public Mission(String missionDate, String mission) {
@@ -40,13 +39,5 @@ public class Mission {
 
     public void setChallenge(Challenge challenge) {
         this.challenge = challenge;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setComplete(boolean complete) {
-        isComplete = complete;
     }
 }
