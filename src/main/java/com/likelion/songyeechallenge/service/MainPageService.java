@@ -22,7 +22,7 @@ public class MainPageService {
 
     private final ChallengeRepository challengeRepository;
 
-    public List<MainPageResponseDto> findResentRecruitPost() {
+    public List<MainPageResponseDto> findImminentPost() {
         List<Challenge> challenges = challengeRepository.findImminent(formatedToday);
         return challenges.stream().limit(4)
                 .map(MainPageResponseDto::new)

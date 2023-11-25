@@ -18,9 +18,9 @@ public class MainPageController {
 
     private final MainPageService mainPageService;
 
-    @GetMapping("/recruiting")
-    public List<MainPageResponseDto> getRecentRecruitingChallenge() {
-        return mainPageService.findResentRecruitPost();
+    @GetMapping("/imminent")
+    public List<MainPageResponseDto> getImminentChallenge() {
+        return mainPageService.findImminentPost();
     }
 
     @GetMapping("/hot")
