@@ -1,11 +1,17 @@
 package com.likelion.songyeechallenge.web.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@NoArgsConstructor
 public class ReviewUpdateRequestDto {
 
     private String title;
     private String content;
-    private String token; // 사용자 인증 토큰
+
+    public ReviewUpdateRequestDto(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

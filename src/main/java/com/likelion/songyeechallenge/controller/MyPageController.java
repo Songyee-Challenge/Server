@@ -49,30 +49,15 @@ public class MyPageController {
     }
 
     @DeleteMapping("/review/delete/{id}")
-    public ResponseEntity<String> deleteReview(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
+    public Long deleteReview(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
-
-        if (reviewService.isReviewCreatedByUser(id, jwtToken)) {
-            reviewService.deleteReview(id);
-            return ResponseEntity.ok("Review deleted successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You do not have permission to delete this review.");
-        }
+        return reviewService.deleteReview(id, jwtToken);
     }
 
     @PutMapping("/review/edit/{id}")
-    public ResponseEntity<String> updateReview(@PathVariable Long id, @RequestBody ReviewUpdateRequestDto requestDto) {
-        try {
-            reviewService.updateReview(id, requestDto);
-            return ResponseEntity.ok("Review updated successfully.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (ReviewService.UnauthorizedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update review: " + e.getMessage());
-        }
+    public Long updateReview(@PathVariable Long id, @RequestBody ReviewUpdateRequestDto requestDto, @RequestHeader("Authorization") String authorizationHeader) {
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        return reviewService.updateReview(id, requestDto, jwtToken);
     }
 
     @GetMapping("/mission")
@@ -88,9 +73,9 @@ public class MyPageController {
     }
 
     @GetMapping("/info")
-    public List<UserInfoDto> getUserInfo(@RequestHeader("Authorization") String authorizationHeader) {
+    public UserInfoDto getUserInfo(@RequestHeader("Authorization") String authorizationHeader) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
-        return myPageService.showMyInfo(jwtToken);
+        return myPageService.findMyInfo(jwtToken);
     }
 
 
