@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -146,11 +145,11 @@ public class MyPageService {
     }
 
     @Transactional
-    public UserInfoDto findMyInfo(String jwtToken) {
+    public MyInfoDto findMyInfo(String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
         User user = userRepository.findByUser_id(userId);
-        UserInfoDto userInfoDto = convertToUserInfoDto(user);
-        return userInfoDto;
+        MyInfoDto myInfoDto = convertToUserInfoDto(user);
+        return myInfoDto;
     }
 
     @Transactional
@@ -184,13 +183,13 @@ public class MyPageService {
                 .collect(Collectors.toList());
     }
 
-    private UserInfoDto convertToUserInfoDto(User user) {
-        UserInfoDto userInfoDto = new UserInfoDto();
-        userInfoDto.setUser_id(user.getUser_id());
-        userInfoDto.setName(user.getName());
-        userInfoDto.setEmail(user.getEmail());
-        userInfoDto.setMajor(user.getMajor());
-        userInfoDto.setStudent_id(user.getStudent_id());
-        return userInfoDto;
+    private MyInfoDto convertToUserInfoDto(User user) {
+        MyInfoDto myInfoDto = new MyInfoDto();
+        myInfoDto.setUser_id(user.getUser_id());
+        myInfoDto.setName(user.getName());
+        myInfoDto.setEmail(user.getEmail());
+        myInfoDto.setMajor(user.getMajor());
+        myInfoDto.setStudent_id(user.getStudent_id());
+        return myInfoDto;
     }
 }

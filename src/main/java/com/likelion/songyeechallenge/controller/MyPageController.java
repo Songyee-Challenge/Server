@@ -91,7 +91,7 @@ public class MyPageController {
     }
 
     @GetMapping("/info")
-    public UserInfoDto getUserInfo(@RequestHeader("Authorization") String authorizationHeader) {
+    public MyInfoDto getUserInfo(@RequestHeader("Authorization") String authorizationHeader) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         return myPageService.findMyInfo(jwtToken);
     }

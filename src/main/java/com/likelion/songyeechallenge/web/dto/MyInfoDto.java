@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserInfoDto {
+public class MyInfoDto {
 
     private Long user_id;
     private String name;
@@ -16,7 +16,7 @@ public class UserInfoDto {
     private String major;
     private Long student_id;
 
-    public UserInfoDto(User user) {
+    public MyInfoDto(User user) {
         this.user_id = user.getUser_id();
         this.name = user.getName();
         this.email = user.getEmail();
