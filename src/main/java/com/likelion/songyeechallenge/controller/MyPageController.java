@@ -24,6 +24,24 @@ public class MyPageController {
         return myPageService.findMyName(jwtToken);
     }
 
+    @GetMapping("/challenge/recruiting/top2")
+    public List<MyChallengeListResponseDto> getMyRecuritingTop2(@RequestHeader("Authorization") String authorizationHeader) {
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        return myPageService.findMyRecruitingTop2(jwtToken);
+    }
+
+    @GetMapping("/challenge/inprocess/top2")
+    public List<MyChallengeListResponseDto> getMyInprocessTop2(@RequestHeader("Authorization") String authorizationHeader) {
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        return myPageService.findMyInProcessTop2(jwtToken);
+    }
+
+    @GetMapping("/challenge/finished/top2")
+    public List<MyChallengeListResponseDto> getMyFinishedTop2(@RequestHeader("Authorization") String authorizationHeader) {
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        return myPageService.findMyFinishedTop2(jwtToken);
+    }
+
     @GetMapping("/challenge/recruiting")
     public List<ChallengeListResponseDto> getMyRecruiting(@RequestHeader("Authorization") String authorizationHeader) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
