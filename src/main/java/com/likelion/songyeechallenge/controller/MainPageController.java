@@ -3,10 +3,7 @@ package com.likelion.songyeechallenge.controller;
 import com.likelion.songyeechallenge.service.MainPageService;
 import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,7 +25,7 @@ public class MainPageController {
     }
 
     @GetMapping("/category")
-    public List<ChallengeListResponseDto> getChallengeByCategory(@RequestPart("category") String category) {
+    public List<ChallengeListResponseDto> getChallengeByCategory(@RequestParam String category) {
         return mainPageService.findByCategory(category);
     }
 }
