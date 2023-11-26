@@ -43,7 +43,7 @@ public class MyPageController {
     }
 
     @GetMapping("/review")
-    public List<MyReviewResponseDto> getMyReviews(@RequestHeader("Authorization") String authorizationHeader) {
+    public List<ReviewListResponseDto> getMyReviews(@RequestHeader("Authorization") String authorizationHeader) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         return myPageService.findMyReview(jwtToken);
     }

@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 @Getter
 public class MyMissionResponseDto {
 
-    private static String filePath = "src/main/resources/static/images/";
     private Long challenge_id;
     private String challenge_title;
     private String explain;
@@ -23,7 +22,7 @@ public class MyMissionResponseDto {
         this.challenge_id = entity.getChallenge_id();
         this.challenge_title = entity.getTitle() + " (" + entity.getCategory() + ")";
         this.explain = entity.getExplain();
-        this.picture = filePath + entity.getPicture().getNewName();
+        this.picture = entity.getPicture().getNewName();
         this.missions = entity.getMissions().stream()
                 .map(mission -> new MyMissionCompleteDto(mission, userMissions))
                 .collect(Collectors.toList());
