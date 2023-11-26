@@ -3,6 +3,7 @@ package com.likelion.songyeechallenge.service;
 import com.likelion.songyeechallenge.config.JwtTokenProvider;
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
+import com.likelion.songyeechallenge.domain.like.Like;
 import com.likelion.songyeechallenge.domain.mission.Mission;
 import com.likelion.songyeechallenge.domain.mission.MissionRepository;
 import com.likelion.songyeechallenge.domain.userMission.UserMission;
@@ -11,10 +12,7 @@ import com.likelion.songyeechallenge.domain.review.Review;
 import com.likelion.songyeechallenge.domain.review.ReviewRepository;
 import com.likelion.songyeechallenge.domain.user.User;
 import com.likelion.songyeechallenge.domain.user.UserRepository;
-import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
-import com.likelion.songyeechallenge.web.dto.MyMissionResponseDto;
-import com.likelion.songyeechallenge.web.dto.MyReviewResponseDto;
-import com.likelion.songyeechallenge.web.dto.UserInfoDto;
+import com.likelion.songyeechallenge.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -67,12 +65,18 @@ public class MyPageService {
     }
 
     @Transactional(readOnly = true)
-    public List<MyReviewResponseDto> findMyReview(String jwtToken) {
+    public List<ReviewListResponseDto> findMyReview(String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        User user = userRepository.findByUser_id(userId);
+        List<Long> likedReviewIdList = user.getLikes().stream()
+                .map(Like::getReview)
+                .map(Review::getReview_id)
+                .collect(Collectors.toList());
+
         List<Review> reviews = reviewRepository.findByUser(userId);
 
         return reviews.stream()
-                .map(MyReviewResponseDto::new)
+                .map(review -> new ReviewListResponseDto(review, likedReviewIdList.contains(review.getReview_id())))
                 .collect(Collectors.toList());
     }
 
