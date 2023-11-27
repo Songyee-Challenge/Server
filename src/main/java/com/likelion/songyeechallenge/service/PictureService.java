@@ -3,6 +3,7 @@ package com.likelion.songyeechallenge.service;
 import com.likelion.songyeechallenge.domain.picture.Picture;
 import com.likelion.songyeechallenge.domain.picture.PictureRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +19,8 @@ import java.util.UUID;
 @Service
 public class PictureService {
 
-    private static String uploadDir = "./src/main/resources/static/images";
+    @Value("${file.upload.dir}")
+    private static String uploadDir;
     private final PictureRepository pictureRepository;
 
     @Transactional
