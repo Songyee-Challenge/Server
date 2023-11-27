@@ -54,7 +54,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                         .allowedOrigins("http://13.53.212.211:3000")
                         .allowedMethods("OPTIONS","GET","POST","PUT","DELETE")
                         .allowedHeaders("*")
-                        .exposedHeaders("Content-Dsposition", "X-AUTH-TOKEN", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
+                        .exposedHeaders("Content-Dsposition", "X-AUTH-TOKEN", "Authorization")
                         .allowCredentials(true)
                         .maxAge(3600);
             }
