@@ -18,7 +18,7 @@ public class MainPageResponseDto {
         this.challenge_title = entity.getTitle() + " (" + entity.getCategory() + ")";
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
-        this.explain = entity.getExplain();
+        this.explain = entity.getDetail();
         this.picture = entity.getPicture().getNewName();
         this.participantsNumber = entity.getParticipants().size();
     }

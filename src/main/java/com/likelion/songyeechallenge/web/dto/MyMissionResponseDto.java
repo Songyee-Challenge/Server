@@ -13,7 +13,7 @@ public class MyMissionResponseDto {
     private Long challenge_id;
     private String challenge_title;
     private String period;
-    private String explain;
+    private String detail;
     private String picture;
     private List<MyMissionCompleteDto> missions;
     private int missionCount;
@@ -23,7 +23,7 @@ public class MyMissionResponseDto {
         this.challenge_id = entity.getChallenge_id();
         this.challenge_title = entity.getTitle() + " (" + entity.getCategory() + ")";
         this.period = entity.getStartDate() + " ~ " + entity.getEndDate();
-        this.explain = entity.getExplain();
+        this.detail = entity.getDetail();
         this.picture = entity.getPicture().getNewName();
         this.missions = entity.getMissions().stream()
                 .map(mission -> new MyMissionCompleteDto(mission, userMissions))
