@@ -12,6 +12,7 @@ public class MyMissionResponseDto {
 
     private Long challenge_id;
     private String challenge_title;
+    private String period;
     private String explain;
     private String picture;
     private List<MyMissionCompleteDto> missions;
@@ -21,6 +22,7 @@ public class MyMissionResponseDto {
     public MyMissionResponseDto(Challenge entity, List<UserMission> userMissions) {
         this.challenge_id = entity.getChallenge_id();
         this.challenge_title = entity.getTitle() + " (" + entity.getCategory() + ")";
+        this.period = entity.getStartDate() + " ~ " + entity.getEndDate();
         this.explain = entity.getExplain();
         this.picture = entity.getPicture().getNewName();
         this.missions = entity.getMissions().stream()

@@ -15,7 +15,7 @@ public class ChallengeSaveRequestDto {
     private String startDate;
     private String endDate;
     private String category;
-    private String explain;
+    private String detail;
     private List<MissionSaveRequestDto> missions;
     private Picture picture;
 
@@ -26,7 +26,7 @@ public class ChallengeSaveRequestDto {
         this.startDate = challenge.getStartDate();
         this.endDate = challenge.getEndDate();
         this.category = challenge.getCategory();
-        this.explain = challenge.getExplain();
+        this.detail = challenge.getDetail();
         this.picture = challenge.getPicture();
     }
 
@@ -36,7 +36,7 @@ public class ChallengeSaveRequestDto {
                 .startDate(startDate)
                 .endDate(endDate)
                 .category(category)
-                .explain(explain)
+                .detail(detail)
                 .picture(picture)
                 .build();
     }

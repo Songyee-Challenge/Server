@@ -12,7 +12,7 @@ public class ChallengeListResponseDto {
     private String challenge_title;
     private String startDate;
     private String endDate;
-    private String explain;
+    private String detail;
     private double progressPercent;
     private String picture;
 
@@ -21,7 +21,7 @@ public class ChallengeListResponseDto {
         this.challenge_title = entity.getTitle() + " (" + entity.getCategory() + ")";
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
-        this.explain = entity.getExplain();
+        this.detail = entity.getDetail();
         this.progressPercent = calculateProgress();
         this.picture = entity.getPicture().getNewName();
     }

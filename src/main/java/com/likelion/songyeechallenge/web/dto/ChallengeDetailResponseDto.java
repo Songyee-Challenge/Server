@@ -16,7 +16,7 @@ public class ChallengeDetailResponseDto {
     private String writer;
     private String startDate;
     private String endDate;
-    private String explain;
+    private String detail;
     private List<MissionResponseDto> missions;
     private String picture;
     private int participantsNumber;
@@ -28,7 +28,7 @@ public class ChallengeDetailResponseDto {
         this.writer = entity.getWriter();
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
-        this.explain = entity.getExplain();
+        this.detail = entity.getDetail();
         this.missions = convertMissionDto(entity.getMissions());
         this.picture = entity.getPicture().getNewName();
         this.participantsNumber = entity.getParticipants().size();
