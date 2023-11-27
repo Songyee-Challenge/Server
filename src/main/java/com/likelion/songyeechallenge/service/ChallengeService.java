@@ -53,7 +53,7 @@ public class ChallengeService {
         Picture picture = pictureService.uploadPicture(file);
         picture.setChallenge(challenge);
 
-        List<Mission> missions = missionService.uploadMission(requestDto.getMissions(), challenge);
+        List<Mission> missions = missionService.saveMission(requestDto.getMissions(), challenge);
         challenge.setMissions(missions);
 
         User author = userRepository.findByUser_id(jwtTokenProvider.getUserIdFromToken(jwtToken));
