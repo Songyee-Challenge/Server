@@ -3,6 +3,7 @@ package com.likelion.songyeechallenge.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -32,6 +33,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                                 authz
                                         .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
                                         .antMatchers("/home/**", "/api/v1/user/**", "/h2-console/**", "/api/v1/signup/**", "/images/**", "/api/v1/picture/**").permitAll()
+                                        .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
                                         .anyRequest().authenticated()
                                         .and()
                                         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
