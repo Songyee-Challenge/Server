@@ -2,7 +2,9 @@ package com.likelion.songyeechallenge.service;
 
 import com.likelion.songyeechallenge.domain.challenge.Challenge;
 import com.likelion.songyeechallenge.domain.challenge.ChallengeRepository;
+import com.likelion.songyeechallenge.web.dto.ChallengeDetailResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
+import com.likelion.songyeechallenge.web.dto.MainPageResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +23,17 @@ public class MainPageService {
 
     private final ChallengeRepository challengeRepository;
 
-    public List<ChallengeListResponseDto> findImminentPost() {
+    public List<MainPageResponseDto> findImminentPost() {
         List<Challenge> challenges = challengeRepository.findImminent(formatedToday);
         return challenges.stream().limit(4)
-                .map(ChallengeListResponseDto::new)
+                .map(MainPageResponseDto::new)
                 .collect(Collectors.toList());
     }
 
-    public List<ChallengeListResponseDto> findHotInProcessPost() {
+    public List<MainPageResponseDto> findHotInProcessPost() {
         List<Challenge> challenges = challengeRepository.findBeforeStartHot(formatedToday);
         return challenges.stream().limit(8)
-                .map(ChallengeListResponseDto::new)
+                .map(MainPageResponseDto::new)
                 .collect(Collectors.toList());
     }
 

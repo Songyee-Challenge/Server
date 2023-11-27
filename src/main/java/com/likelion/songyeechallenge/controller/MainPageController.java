@@ -1,7 +1,9 @@
 package com.likelion.songyeechallenge.controller;
 
 import com.likelion.songyeechallenge.service.MainPageService;
+import com.likelion.songyeechallenge.web.dto.ChallengeDetailResponseDto;
 import com.likelion.songyeechallenge.web.dto.ChallengeListResponseDto;
+import com.likelion.songyeechallenge.web.dto.MainPageResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,12 +17,12 @@ public class MainPageController {
     private final MainPageService mainPageService;
 
     @GetMapping("/imminent")
-    public List<ChallengeListResponseDto> getImminentChallenge() {
+    public List<MainPageResponseDto> getImminentChallenge() {
         return mainPageService.findImminentPost();
     }
 
     @GetMapping("/hot")
-    public List<ChallengeListResponseDto> getHotInProcessChallenge() {
+    public List<MainPageResponseDto> getHotInProcessChallenge() {
         return mainPageService.findHotInProcessPost();
     }
 
