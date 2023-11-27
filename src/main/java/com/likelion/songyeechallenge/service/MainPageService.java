@@ -19,28 +19,41 @@ public class MainPageService {
 
     private LocalDate today = LocalDate.now();
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-    private String formatedToday = today.format(formatter);
+    private String formattedToday = today.format(formatter);
 
     private final ChallengeRepository challengeRepository;
 
     public List<MainPageResponseDto> findImminentPost() {
-        List<Challenge> challenges = challengeRepository.findImminent(formatedToday);
-        return challenges.stream().limit(4)
-                .map(MainPageResponseDto::new)
-                .collect(Collectors.toList());
+        List<Challenge> challenges = challengeRepository.findImminent(formattedToday);
+        return findPosts(challenges, 4);
     }
 
-    public List<MainPageResponseDto> findHotInProcessPost() {
-        List<Challenge> challenges = challengeRepository.findBeforeStartHot(formatedToday);
-        return challenges.stream().limit(8)
-                .map(MainPageResponseDto::new)
-                .collect(Collectors.toList());
+    public List<MainPageResponseDto> findImminentPostAll() {
+        List<Challenge> challenges = challengeRepository.findImminent(formattedToday);
+        return findPosts(challenges, Integer.MAX_VALUE);
+    }
+
+    public List<MainPageResponseDto> findHotBeforeStartPost() {
+        List<Challenge> challenges = challengeRepository.findBeforeStartHot(formattedToday);
+        return findPosts(challenges, 8);
+    }
+
+    public List<MainPageResponseDto> findHotBeforeStartPostAll() {
+        List<Challenge> challenges = challengeRepository.findBeforeStartHot(formattedToday);
+        return findPosts(challenges, Integer.MAX_VALUE);
     }
 
     public List<ChallengeListResponseDto> findByCategory(String category) {
         List<Challenge> challenges = challengeRepository.findByCategory(category);
         return challenges.stream()
                 .map(ChallengeListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<MainPageResponseDto> findPosts(List<Challenge> challenges, int limit) {
+        return challenges.stream()
+                .limit(limit)
+                .map(MainPageResponseDto::new)
                 .collect(Collectors.toList());
     }
 }

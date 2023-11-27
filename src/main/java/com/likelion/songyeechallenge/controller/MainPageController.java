@@ -21,9 +21,19 @@ public class MainPageController {
         return mainPageService.findImminentPost();
     }
 
+    @GetMapping("/imminent/all")
+    public List<MainPageResponseDto> getImminentChallengeAll() {
+        return mainPageService.findImminentPostAll();
+    }
+
     @GetMapping("/hot")
     public List<MainPageResponseDto> getHotInProcessChallenge() {
-        return mainPageService.findHotInProcessPost();
+        return mainPageService.findHotBeforeStartPost();
+    }
+
+    @GetMapping("/hot/all")
+    public List<MainPageResponseDto> getHotInProcessChallengeAll() {
+        return mainPageService.findHotBeforeStartPostAll();
     }
 
     @GetMapping("/category")
