@@ -35,7 +35,7 @@ public class Challenge {
     @Column(nullable = false)
     private String category;
 
-    @Column(columnDefinition = "Text", nullable = false, length = 500)
+    @Column(columnDefinition = "Text", length = 500)
     private String detail;
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
