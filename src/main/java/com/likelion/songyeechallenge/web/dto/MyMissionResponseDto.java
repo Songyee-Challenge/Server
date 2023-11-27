@@ -22,7 +22,7 @@ public class MyMissionResponseDto {
     public MyMissionResponseDto(Challenge entity, List<UserMission> userMissions) {
         this.challenge_id = entity.getChallenge_id();
         this.challenge_title = entity.getTitle() + " (" + entity.getCategory() + ")";
-        this.period = entity.getStartDate() + " ~ " + entity.getEndDate();
+        this.period = convertToDateFormat(entity.getStartDate()) + " ~ " + convertToDateFormat(entity.getEndDate());
         this.detail = entity.getDetail();
         this.picture = entity.getPicture().getNewName();
         this.missions = entity.getMissions().stream()
@@ -30,6 +30,10 @@ public class MyMissionResponseDto {
                 .collect(Collectors.toList());
         this.missionCount = entity.getMissions().size();
         this.completedCount = calcualteCompletedMission(userMissions);
+    }
+
+    private String convertToDateFormat(String date) {
+        return date.substring(0, 4) + "." + date.substring(4, 6) + "." + date.substring(6, 8);
     }
 
     private int calcualteCompletedMission(List<UserMission> userMissions) {
