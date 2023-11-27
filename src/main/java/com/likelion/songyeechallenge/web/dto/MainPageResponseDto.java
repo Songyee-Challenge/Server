@@ -10,6 +10,7 @@ public class MainPageResponseDto {
     private String startDate;
     private String endDate;
     private String explain;
+    private String picture;
     private int participantsNumber;
 
     public MainPageResponseDto(Challenge entity) {
@@ -18,6 +19,7 @@ public class MainPageResponseDto {
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
         this.explain = entity.getExplain();
+        this.picture = entity.getPicture().getNewName();
         this.participantsNumber = entity.getParticipants().size();
     }
 }
