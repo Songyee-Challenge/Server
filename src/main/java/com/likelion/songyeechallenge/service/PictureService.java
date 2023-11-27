@@ -20,7 +20,7 @@ import java.util.UUID;
 public class PictureService {
 
     @Value("${file.upload.dir}")
-    private static String uploadDir;
+    private String uploadDir;
     private final PictureRepository pictureRepository;
 
     @Transactional

@@ -1,6 +1,7 @@
 package com.likelion.songyeechallenge.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +17,12 @@ import java.nio.file.Paths;
 @RestController
 public class PictureController {
 
-    private static final String imagePath = "src/main/resources/static/images/";
+    @Value("${file.upload.dir}")
+    private String imagePath;
 
     @GetMapping("/picture")
     public ResponseEntity<Resource> returnImage(@RequestParam String pictureName) {
-        String fullPath = Paths.get(imagePath, pictureName).toString();
+        String fullPath = Paths.get(imagePath).resolve(pictureName).toString();
         Resource resource = new FileSystemResource(fullPath);
 
         // Content-Type 설정
