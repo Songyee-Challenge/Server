@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -18,14 +20,15 @@ public class MissionService {
     private final MissionRepository missionRepository;
 
     @Transactional
-    public List<Mission> uploadMission(List<MissionSaveRequestDto> missionDtoList, Challenge challenge) {
-        List<Mission> missions = new ArrayList<>();
-
-        for (MissionSaveRequestDto missionDto : missionDtoList) {
-            Mission mission = missionDto.toEntityMission();
-            mission.setChallenge(challenge);
-            missions.add(missionRepository.save(mission));
-        }
-        return missions;
+    public List<Mission> saveMission(List<MissionSaveRequestDto> missionDtoList, Challenge challenge) {
+        List<Mission> missions = missionDtoList.stream()
+                .map(dto -> {
+                     Mission mission = dto.toEntityMission();
+                     mission.setChallenge(challenge);
+                     return mission;
+                })
+                .sorted(Comparator.comparing(Mission::getMissionDate))
+                .collect(Collectors.toList());
+        return missionRepository.saveAll(missions);
     }
 }
