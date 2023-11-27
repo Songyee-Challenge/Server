@@ -21,15 +21,13 @@ public class Challenge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long challenge_id;
 
-    @Column(nullable = false, length = 30)
+    @Column(length = 30)
     private String title;
 
     private String writer;
 
-    @Column(nullable = false)
     private String startDate;
 
-    @Column(nullable = false)
     private String endDate;
 
     @Column(nullable = false)
