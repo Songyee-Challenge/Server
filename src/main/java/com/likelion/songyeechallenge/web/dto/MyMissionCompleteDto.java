@@ -21,7 +21,7 @@ public class MyMissionCompleteDto {
         this.mission = mission.getMission();
 
         Optional<UserMission> userMission = userMissions.stream()
-                .filter(um -> um.getMission().equals(mission))
+                .filter(um -> um.getMission() != null && um.getMission().equals(mission))
                 .findFirst();
 
         this.isComplete = userMission.map(UserMission::isComplete).orElse(false);
