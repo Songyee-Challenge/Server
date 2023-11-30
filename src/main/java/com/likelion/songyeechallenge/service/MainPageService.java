@@ -17,25 +17,38 @@ import java.util.stream.Collectors;
 @Service
 public class MainPageService {
 
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
     private final ChallengeRepository challengeRepository;
 
     public List<MainPageResponseDto> findImminentPost() {
-        List<Challenge> challenges = challengeRepository.findImminent();
+        LocalDate today = LocalDate.now();
+        String formattedToday = today.format(formatter);
+
+        List<Challenge> challenges = challengeRepository.findImminent(formattedToday);
         return findPosts(challenges, 4);
     }
 
     public List<MainPageResponseDto> findImminentPostAll() {
-        List<Challenge> challenges = challengeRepository.findImminent();
+        LocalDate today = LocalDate.now();
+        String formattedToday = today.format(formatter);
+
+        List<Challenge> challenges = challengeRepository.findImminent(formattedToday);
         return findPosts(challenges, Integer.MAX_VALUE);
     }
 
     public List<MainPageResponseDto> findHotBeforeStartPost() {
-        List<Challenge> challenges = challengeRepository.findBeforeStartHot();
+        LocalDate today = LocalDate.now();
+        String formattedToday = today.format(formatter);
+
+        List<Challenge> challenges = challengeRepository.findBeforeStartHot(formattedToday);
         return findPosts(challenges, 8);
     }
 
     public List<MainPageResponseDto> findHotBeforeStartPostAll() {
-        List<Challenge> challenges = challengeRepository.findBeforeStartHot();
+        LocalDate today = LocalDate.now();
+        String formattedToday = today.format(formatter);
+
+        List<Challenge> challenges = challengeRepository.findBeforeStartHot(formattedToday);
         return findPosts(challenges, Integer.MAX_VALUE);
     }
 

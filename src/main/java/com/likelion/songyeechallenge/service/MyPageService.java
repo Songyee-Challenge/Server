@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 @Service
 public class MyPageService {
 
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+
     private final ChallengeRepository challengeRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final ReviewRepository reviewRepository;
@@ -46,10 +48,13 @@ public class MyPageService {
 
     @Transactional(readOnly = true)
     public List<MyChallengeListResponseDto> findMyRecruitingTop2(String jwtToken) {
+        LocalDate today = LocalDate.now();
+        String formattedToday = today.format(formatter);
+
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
         Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
 
-        List<Challenge> myImminentChallenges = challengeRepository.findImminent().stream()
+        List<Challenge> myImminentChallenges = challengeRepository.findImminent(formattedToday).stream()
                 .filter(participatedChallenges::contains)
                 .collect(Collectors.toList());
         int myChallengeNumber = (int) myImminentChallenges.size();
@@ -62,10 +67,13 @@ public class MyPageService {
 
     @Transactional(readOnly = true)
     public List<MyChallengeListResponseDto> findMyInProcessTop2(String jwtToken) {
+        LocalDate today = LocalDate.now();
+        String formattedToday = today.format(formatter);
+
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
         Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
 
-        List<Challenge> myInProcessEndingSoons = challengeRepository.findInProcessEndingSoon().stream()
+        List<Challenge> myInProcessEndingSoons = challengeRepository.findInProcessEndingSoon(formattedToday).stream()
                 .filter(participatedChallenges::contains)
                 .collect(Collectors.toList());
         int myChallengeNumber = (int) myInProcessEndingSoons.size();
@@ -78,10 +86,13 @@ public class MyPageService {
 
     @Transactional(readOnly = true)
     public List<MyChallengeListResponseDto> findMyFinishedTop2(String jwtToken) {
+        LocalDate today = LocalDate.now();
+        String formattedToday = today.format(formatter);
+
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
         Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
 
-        List<Challenge> myJustFinished = challengeRepository.findJustFinished().stream()
+        List<Challenge> myJustFinished = challengeRepository.findJustFinished(formattedToday).stream()
                 .filter(participatedChallenges::contains)
                 .collect(Collectors.toList());
         int myChallengeNumber = (int) myJustFinished.size();
@@ -94,10 +105,13 @@ public class MyPageService {
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findMyRecruiting(String jwtToken) {
+        LocalDate today = LocalDate.now();
+        String formattedToday = today.format(formatter);
+
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
         Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
 
-        return challengeRepository.findBeforeStartDesc().stream()
+        return challengeRepository.findBeforeStartDesc(formattedToday).stream()
                 .filter(participatedChallenges::contains)
                 .map(ChallengeListResponseDto::new)
                 .collect(Collectors.toList());
@@ -105,10 +119,13 @@ public class MyPageService {
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findMyInProcess(String jwtToken) {
+        LocalDate today = LocalDate.now();
+        String formattedToday = today.format(formatter);
+
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
         Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
 
-        return challengeRepository.findInProcessDesc().stream()
+        return challengeRepository.findInProcessDesc(formattedToday).stream()
                 .filter(participatedChallenges::contains)
                 .map(ChallengeListResponseDto::new)
                 .collect(Collectors.toList());
@@ -116,10 +133,13 @@ public class MyPageService {
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findMyFinished(String jwtToken) {
+        LocalDate today = LocalDate.now();
+        String formattedToday = today.format(formatter);
+
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
         Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
 
-        return challengeRepository.findFinishedDesc().stream()
+        return challengeRepository.findFinishedDesc(formattedToday).stream()
                 .filter(participatedChallenges::contains)
                 .map(ChallengeListResponseDto::new)
                 .collect(Collectors.toList());
