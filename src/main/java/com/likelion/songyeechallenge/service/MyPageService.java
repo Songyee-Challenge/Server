@@ -30,10 +30,6 @@ import java.util.stream.Collectors;
 @Service
 public class MyPageService {
 
-    private LocalDate today = LocalDate.now();
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-    String formattedToday = today.format(formatter);
-
     private final ChallengeRepository challengeRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final ReviewRepository reviewRepository;
@@ -50,32 +46,83 @@ public class MyPageService {
 
     @Transactional(readOnly = true)
     public List<MyChallengeListResponseDto> findMyRecruitingTop2(String jwtToken) {
-        return findMyTop2(jwtToken, challengeRepository::findImminent);
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
+
+        List<Challenge> myImminentChallenges = challengeRepository.findImminent().stream()
+                .filter(participatedChallenges::contains)
+                .collect(Collectors.toList());
+        int myChallengeNumber = (int) myImminentChallenges.size();
+
+        return myImminentChallenges.stream()
+                .limit(2)
+                .map(myChallenge -> new MyChallengeListResponseDto(myChallenge, myChallengeNumber))
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<MyChallengeListResponseDto> findMyInProcessTop2(String jwtToken) {
-        return findMyTop2(jwtToken, challengeRepository::findInProcessEndingSoon);
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
+
+        List<Challenge> myInProcessEndingSoons = challengeRepository.findInProcessEndingSoon().stream()
+                .filter(participatedChallenges::contains)
+                .collect(Collectors.toList());
+        int myChallengeNumber = (int) myInProcessEndingSoons.size();
+
+        return myInProcessEndingSoons.stream()
+                .limit(2)
+                .map(myChallenge -> new MyChallengeListResponseDto(myChallenge, myChallengeNumber))
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<MyChallengeListResponseDto> findMyFinishedTop2(String jwtToken) {
-        return findMyTop2(jwtToken, challengeRepository::findJustFinished);
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
+
+        List<Challenge> myJustFinished = challengeRepository.findJustFinished().stream()
+                .filter(participatedChallenges::contains)
+                .collect(Collectors.toList());
+        int myChallengeNumber = (int) myJustFinished.size();
+
+        return myJustFinished.stream()
+                .limit(2)
+                .map(myChallenge -> new MyChallengeListResponseDto(myChallenge, myChallengeNumber))
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findMyRecruiting(String jwtToken) {
-        return findChallengesByStatus(jwtToken, today -> challengeRepository.findBeforeStartDesc(formattedToday));
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
+
+        return challengeRepository.findBeforeStartDesc().stream()
+                .filter(participatedChallenges::contains)
+                .map(ChallengeListResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findMyInProcess(String jwtToken) {
-        return findChallengesByStatus(jwtToken, today -> challengeRepository.findInProcessDesc(formattedToday));
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
+
+        return challengeRepository.findInProcessDesc().stream()
+                .filter(participatedChallenges::contains)
+                .map(ChallengeListResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findMyFinished(String jwtToken) {
-        return findChallengesByStatus(jwtToken, today -> challengeRepository.findFinishedDesc(formattedToday));
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
+
+        return challengeRepository.findFinishedDesc().stream()
+                .filter(participatedChallenges::contains)
+                .map(ChallengeListResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -138,31 +185,6 @@ public class MyPageService {
         userMission.setComplete(!userMission.isComplete());
         userMissionRepository.save(userMission);
         return userMission.isComplete();
-    }
-
-    private List<MyChallengeListResponseDto> findMyTop2(String jwtToken, Function<String, List<Challenge>> challengeFinder) {
-        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
-
-        List<Challenge> myChallenges = challengeFinder.apply(formattedToday).stream()
-                .filter(participatedChallenges::contains)
-                .collect(Collectors.toList());
-        int myChallengeNumber = myChallenges.size();
-
-        return myChallenges.stream()
-                .limit(2)
-                .map(myChallenge -> new MyChallengeListResponseDto(myChallenge, myChallengeNumber))
-                .collect(Collectors.toList());
-    }
-
-    private List<ChallengeListResponseDto> findChallengesByStatus(String jwtToken, Function<Long, List<Challenge>> challengeFinder) {
-        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
-
-        return challengeFinder.apply(userId).stream()
-                .filter(participatedChallenges::contains)
-                .map(ChallengeListResponseDto::new)
-                .collect(Collectors.toList());
     }
 
     private MyInfoDto convertToUserInfoDto(User user) {

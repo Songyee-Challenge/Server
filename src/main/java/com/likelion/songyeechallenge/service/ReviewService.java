@@ -17,14 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,10 +26,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class ReviewService {
-
-    private LocalDate today = LocalDate.now();
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-    private String formattedToday = today.format(formatter);
 
     private final ChallengeRepository challengeRepository;
     private final ReviewRepository reviewRepository;
@@ -46,7 +36,7 @@ public class ReviewService {
     @Transactional
     public List<ReviewChallengeDto> findMyChallenge(String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        Set<Challenge> participatedChallenges = challengeRepository.findByMyChallengeAfterStart(userId, formattedToday);
+        Set<Challenge> participatedChallenges = challengeRepository.findByMyChallengeAfterStart(userId);
 
         return participatedChallenges.stream()
                 .map(ReviewChallengeDto::new)

@@ -31,10 +31,6 @@ import java.util.stream.Collectors;
 @Service
 public class ChallengeService {
 
-    private LocalDate today = LocalDate.now();
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-    private String formattedToday = today.format(formatter);
-
     private final ChallengeRepository challengeRepository;
     private final UserRepository userRepository;
     private final MissionRepository missionRepository;
@@ -68,17 +64,17 @@ public class ChallengeService {
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findRecruitingPost() {
-        return findChallengesByStatus(() -> challengeRepository.findBeforeStartDesc(formattedToday));
+        return findChallengesByStatus(() -> challengeRepository.findBeforeStartDesc());
     }
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findInProcessPost() {
-        return findChallengesByStatus(() -> challengeRepository.findInProcessDesc(formattedToday));
+        return findChallengesByStatus(() -> challengeRepository.findInProcessDesc());
     }
 
     @Transactional(readOnly = true)
     public List<ChallengeListResponseDto> findFinishedPost() {
-        return findChallengesByStatus(() -> challengeRepository.findFinishedDesc(formattedToday));
+        return findChallengesByStatus(() -> challengeRepository.findFinishedDesc());
     }
 
     public ChallengeDetailResponseDto findById(Long challenge_id) {
