@@ -79,7 +79,8 @@ public class MyPageController {
     }
 
     @GetMapping("/mission")
-    public List<MyMissionResponseDto> getUserMissions(@RequestHeader("Authorization") String authorizationHeader) {
+    //public List<MyMissionResponseDto> getUserMissions(@RequestHeader("Authorization") String authorizationHeader) {
+    public List<ChallengeListResponseDto> getUserMissions(@RequestHeader("Authorization") String authorizationHeader) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         return myPageService.findMyChallengeAndMission(jwtToken);
     }

@@ -162,20 +162,24 @@ public class MyPageService {
     }
 
     @Transactional(readOnly = true)
-    public List<MyMissionResponseDto> findMyChallengeAndMission(String jwtToken) {
+    //public List<MyMissionResponseDto> findMyChallengeAndMission(String jwtToken) {
+    public List<ChallengeListResponseDto> findMyChallengeAndMission(String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
         Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
 
         return participatedChallenges.stream()
-                .map(challenge -> {
-                    List<Mission> missions = missionRepository.findByChallengeId(challenge.getChallenge_id());
-                    List<UserMission> userMissions = missions.stream()
-                            .map(mission -> userMissionRepository.findMyMission(userId, mission.getMission_id()))
-                            .collect(Collectors.toList());
+                .map(ChallengeListResponseDto::new).collect(Collectors.toList());
 
-                    return new MyMissionResponseDto(challenge, userMissions);
-                })
-                .collect(Collectors.toList());
+//        return participatedChallenges.stream()
+//                .map(challenge -> {
+//                    List<Mission> missions = missionRepository.findByChallengeId(challenge.getChallenge_id());
+//                    List<UserMission> userMissions = missions.stream()
+//                            .map(mission -> userMissionRepository.findMyMission(userId, mission.getMission_id()))
+//                            .collect(Collectors.toList());
+//
+//                    return new MyMissionResponseDto(challenge, userMissions);
+//                })
+//                .collect(Collectors.toList());
     }
 
     @Transactional
