@@ -161,25 +161,30 @@ public class MyPageService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
-    //public List<MyMissionResponseDto> findMyChallengeAndMission(String jwtToken) {
-    public List<ChallengeListResponseDto> findMyChallengeAndMission(String jwtToken) {
+    @Transactional
+    public List<MyMissionResponseDto> findMyChallengeAndMission(String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
         Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
 
         return participatedChallenges.stream()
-                .map(ChallengeListResponseDto::new).collect(Collectors.toList());
+                .map(challenge -> {
+                    List<Mission> missions = missionRepository.findByChallengeId(challenge.getChallenge_id());
+                    List<UserMission> userMissions = missions.stream()
+                            .map(mission -> userMissionRepository.findMyMission(userId, mission.getMission_id()))
+                            .collect(Collectors.toList());
 
-//        return participatedChallenges.stream()
-//                .map(challenge -> {
-//                    List<Mission> missions = missionRepository.findByChallengeId(challenge.getChallenge_id());
-//                    List<UserMission> userMissions = missions.stream()
-//                            .map(mission -> userMissionRepository.findMyMission(userId, mission.getMission_id()))
-//                            .collect(Collectors.toList());
-//
-//                    return new MyMissionResponseDto(challenge, userMissions);
-//                })
-//                .collect(Collectors.toList());
+                    return new MyMissionResponseDto(challenge, userMissions);
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public boolean isCompleteMission(Long missionId, String jwtToken) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
+        UserMission userMission = userMissionRepository.findMyMission(userId, missionId);
+        userMission.setComplete(!userMission.isComplete());
+        userMissionRepository.save(userMission);
+        return userMission.isComplete();
     }
 
     @Transactional
@@ -200,15 +205,6 @@ public class MyPageService {
             // 실패 시 예외를 던져서 실패를 나타냄
             throw new RuntimeException("Failed to delete user account.");
         }
-    }
-
-    @Transactional
-    public boolean isCompleteMission(Long missionId, String jwtToken) {
-        Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
-        UserMission userMission = userMissionRepository.findMyMission(userId, missionId);
-        userMission.setComplete(!userMission.isComplete());
-        userMissionRepository.save(userMission);
-        return userMission.isComplete();
     }
 
     private MyInfoDto convertToUserInfoDto(User user) {
