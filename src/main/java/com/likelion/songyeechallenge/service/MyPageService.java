@@ -167,32 +167,32 @@ public class MyPageService {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
         Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
 
-//        List<MyMissionResponseDto> result = new ArrayList<>();
+        List<MyMissionResponseDto> result = new ArrayList<>();
 
-//        for (Challenge challenge : participatedChallenges) {
-//            List<Mission> missions = missionRepository.findByChallengeId(challenge.getChallenge_id());
-//            List<UserMission> userMissions = new ArrayList<>();
-//
-//            for (Mission mission : missions) {
-//                UserMission userMission = userMissionRepository.findMyMission(userId, mission.getMission_id());
-//                userMissions.add(userMission);
-//            }
-//
-//            result.add(new MyMissionResponseDto(challenge, userMissions));
-//        }
-//
-//        return result;
+        for (Challenge challenge : participatedChallenges) {
+            List<Mission> missions = missionRepository.findByChallengeId(challenge.getChallenge_id());
+            List<UserMission> userMissions = new ArrayList<>();
 
-        return participatedChallenges.stream()
-                .map(challenge -> {
-                    List<Mission> missions = missionRepository.findByChallengeId(challenge.getChallenge_id());
-                    List<UserMission> userMissions = missions.stream()
-                            .map(mission -> userMissionRepository.findMyMission(userId, mission.getMission_id()))
-                            .collect(Collectors.toList());
+            for (Mission mission : missions) {
+                UserMission userMission = userMissionRepository.findMyMission(userId, mission.getMission_id());
+                userMissions.add(userMission);
+            }
 
-                    return new MyMissionResponseDto(challenge, userMissions);
-                })
-                .collect(Collectors.toList());
+            result.add(new MyMissionResponseDto(challenge, userMissions));
+        }
+
+        return result;
+
+//        return participatedChallenges.stream()
+//                .map(challenge -> {
+//                    List<Mission> missions = missionRepository.findByChallengeId(challenge.getChallenge_id());
+//                    List<UserMission> userMissions = missions.stream()
+//                            .map(mission -> userMissionRepository.findMyMission(userId, mission.getMission_id()))
+//                            .collect(Collectors.toList());
+//
+//                    return new MyMissionResponseDto(challenge, userMissions);
+//                })
+//                .collect(Collectors.toList());
     }
 
     @Transactional
