@@ -24,11 +24,15 @@ public class MyMissionCompleteDto {
 
         Optional<UserMission> userMission = userMissions.stream()
                 .filter(um -> {
-                    log.info("미션 아이디: {}", um.getMission().getMission_id());
+                    log.info("유저 미션 아이디: {}", um.getMission().getMission_id());
+                    log.info("미션 아이디: {}", mission_id);
                     boolean isNotNull = um.getMission() != null;
                     boolean condition = um.getMission().getMission_id().equals(mission_id);
                     if (!isNotNull) {
-                        log.info("미션이 비어있거나 유저미션과 일치하는 미션 아이디가 없습니다.");
+                        log.info("미션이 비어있습니다.");
+                    }
+                    else if (!condition) {
+                        log.info("유저미션과 일치하는 미션 아이디가 없습니다.");
                     }
                     return isNotNull && condition;
                 })
