@@ -170,6 +170,7 @@ public class MyPageService {
         List<MyMissionResponseDto> result = new ArrayList<>();
 
         for (Challenge challenge : participatedChallenges) {
+            log.info("챌린지 아이디: {}", challenge.getChallenge_id());
             List<Mission> missions = missionRepository.findByChallengeId(challenge.getChallenge_id());
             List<UserMission> userMissions = new ArrayList<>();
 
