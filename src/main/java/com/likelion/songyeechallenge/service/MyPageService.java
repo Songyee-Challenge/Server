@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -165,6 +166,22 @@ public class MyPageService {
     public List<MyMissionResponseDto> findMyChallengeAndMission(String jwtToken) {
         Long userId = jwtTokenProvider.getUserIdFromToken(jwtToken);
         Set<Challenge> participatedChallenges = challengeRepository.findByParticipants(userId);
+
+//        List<MyMissionResponseDto> result = new ArrayList<>();
+
+//        for (Challenge challenge : participatedChallenges) {
+//            List<Mission> missions = missionRepository.findByChallengeId(challenge.getChallenge_id());
+//            List<UserMission> userMissions = new ArrayList<>();
+//
+//            for (Mission mission : missions) {
+//                UserMission userMission = userMissionRepository.findMyMission(userId, mission.getMission_id());
+//                userMissions.add(userMission);
+//            }
+//
+//            result.add(new MyMissionResponseDto(challenge, userMissions));
+//        }
+//
+//        return result;
 
         return participatedChallenges.stream()
                 .map(challenge -> {

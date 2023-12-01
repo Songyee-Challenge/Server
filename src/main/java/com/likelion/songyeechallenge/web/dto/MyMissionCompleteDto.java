@@ -17,27 +17,11 @@ public class MyMissionCompleteDto {
     private String mission;
     private boolean isComplete;
 
-    public MyMissionCompleteDto(Mission mission, List<UserMission> userMissions) {
-        this.mission_id = mission.getMission_id();
-        this.missionDate = mission.getMissionDate();
-        this.mission = mission.getMission();
-
-        Optional<UserMission> userMission = userMissions.stream()
-                .filter(um -> {
-                    log.info("유저 미션 아이디: {}", um.getMission().getMission_id());
-                    log.info("미션 아이디: {}", mission_id);
-                    boolean isNotNull = um.getMission() != null;
-                    boolean condition = um.getMission().getMission_id().equals(mission_id);
-                    if (!isNotNull) {
-                        log.info("미션이 비어있습니다.");
-                    }
-                    else if (!condition) {
-                        log.info("유저미션과 일치하는 미션 아이디가 없습니다.");
-                    }
-                    return isNotNull && condition;
-                })
-                .findFirst();
-
-        this.isComplete = userMission.map(UserMission::isComplete).orElse(false);
+    public MyMissionCompleteDto(UserMission userMission) {
+        Mission missionEntity = userMission.getMission();
+        this.mission_id = missionEntity.getMission_id();
+        this.missionDate = missionEntity.getMissionDate();
+        this.mission = missionEntity.getMission();
+        this.isComplete = userMission.isComplete();
     }
 }

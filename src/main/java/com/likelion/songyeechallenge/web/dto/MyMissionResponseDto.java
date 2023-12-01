@@ -25,8 +25,8 @@ public class MyMissionResponseDto {
         this.period = convertToDateFormat(entity.getStartDate()) + " ~ " + convertToDateFormat(entity.getEndDate());
         this.detail = entity.getDetail();
         this.picture = entity.getPicture().getNewName();
-        this.missions = entity.getMissions().stream()
-                .map(mission -> new MyMissionCompleteDto(mission, userMissions))
+        this.missions = userMissions.stream()
+                .map(MyMissionCompleteDto::new)
                 .collect(Collectors.toList());
         this.missionCount = entity.getMissions().size();
         this.completedCount = calcualteCompletedMission(userMissions);
