@@ -24,11 +24,13 @@ public class MyMissionCompleteDto {
 
         Optional<UserMission> userMission = userMissions.stream()
                 .filter(um -> {
-                    boolean condition = um.getMission() != null && um.getMission().getMission_id().equals(mission_id);
-                    if (!condition) {
+                    log.info("미션 아이디: {}", um.getMission().getMission_id());
+                    boolean isNotNull = um.getMission() != null;
+                    boolean condition = um.getMission().getMission_id().equals(mission_id);
+                    if (!isNotNull) {
                         log.info("미션이 비어있거나 유저미션과 일치하는 미션 아이디가 없습니다.");
                     }
-                    return condition;
+                    return isNotNull && condition;
                 })
                 .findFirst();
 
